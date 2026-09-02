@@ -7,7 +7,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function HorizontalSlogan() {
   const sectionRef = useRef(null);
-  const textRef = useRef(null);
+  const wrapperRef = useRef(null); 
   const arrowRef = useRef(null);
   const subtextRef = useRef(null);
   
@@ -30,50 +30,55 @@ export default function HorizontalSlogan() {
         pin: true,
         scrub: 1.5,
         start: "top top",
-        end: "+=500%", // Extended pin distance so the animation has plenty of time to play
-        invalidateOnRefresh: true, // Recalculates distances if you resize the window
+        end: "+=500%", 
+        invalidateOnRefresh: true, 
       }
     });
 
     // ==========================================
-    // THE 10-POINT ANIMATION CHOREOGRAPHY
+    // 🎬 THE TWO-LINE CHOREOGRAPHY
     // ==========================================
 
-    // STEP 1: The Container Slide (Runs for the entire 10 seconds of the timeline)
-    tl.to(textRef.current, {
-      // Moves left by its entire width PLUS the screen width to exit cleanly
-      x: () => -(textRef.current.scrollWidth + window.innerWidth + 200),
+    // STEP 1: The Container Slide 
+    tl.fromTo(wrapperRef.current, {
+      x: () => window.innerWidth + 50 
+    }, {
+      x: () => -(wrapperRef.current.scrollWidth + 100),
       ease: "none",
-      duration: 10
+      duration: 12 
     }, 0);
 
-    // STEP 2: The Dispersed Assembly (Starts at 1.5s, when text is actually entering the screen)
+    // STEP 2: The LIVE Dispersed Assembly
     tl.fromTo('.scatter-letter', {
-      y: (index) => (index % 2 === 0 ? 250 : -250), // Wider dispersion
+      y: (index) => (index % 2 === 0 ? "35vh" : "-35vh"), 
+      x: (index) => (index % 2 === 0 ? 80 : -80), 
       opacity: 0,
-      rotateZ: (index) => (index % 2 === 0 ? 45 : -45)
+      scale: 0.2, 
+      rotateZ: (index) => (index % 2 === 0 ? 90 : -90)
     }, {
       y: 0,
+      x: 0,
       opacity: 1,
+      scale: 1,
       rotateZ: 0,
-      stagger: 0.15, // Slowed down stagger so you can see each letter snap into place
+      stagger: 0.15, 
       ease: "back.out(1.5)",
-      duration: 2 // How long each individual letter takes to snap
-    }, 1.5); 
+      duration: 1.5 
+    }, 0.5); 
 
     // STEP 3: Pop-up Stickers
     tl.to(sticker1.current, { scale: 1, rotation: 15, opacity: 1, ease: "back.out(2)", duration: 0.5 }, 3);
     tl.to(sticker2.current, { scale: 1, rotation: -10, opacity: 1, ease: "back.out(2)", duration: 0.5 }, 5);
     tl.to(sticker3.current, { scale: 1, rotation: 10, opacity: 1, ease: "back.out(2)", duration: 0.5 }, 7);
 
-    // STEP 4: Draw Arrow (Starts drawing at 7s)
+    // STEP 4: Draw Arrow 
     tl.to(arrowRef.current, {
       strokeDashoffset: 0,
       duration: 1.5,
       ease: "power2.inOut"
-    }, 7); 
+    }, 7.5); 
 
-    // STEP 5: Subtext Reveal (Fades in at 9s, strictly after the arrow points down)
+    // STEP 5: Subtext Reveal 
     tl.fromTo(subtextRef.current, 
       { opacity: 0, y: 30 }, 
       { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, 
@@ -83,10 +88,14 @@ export default function HorizontalSlogan() {
     return () => tl.kill();
   }, { scope: sectionRef });
 
-  const sloganWords = [
+  // ✂️ SPLIT THE WORDS INTO TWO LINES
+  const line1 = [
     { text: "we", isBrand: false },
     { text: "engineer", isBrand: false },
-    { text: "software", isBrand: true },
+    { text: "software", isBrand: true }
+  ];
+
+  const line2 = [
     { text: "for", isBrand: false },
     { text: "the", isBrand: false },
     { text: "new", isBrand: false },
@@ -99,7 +108,7 @@ export default function HorizontalSlogan() {
       className="relative w-full h-screen bg-black flex flex-col items-center justify-center overflow-hidden cursor-default"
     >
       
-      {/* POP-UP STICKERS */}
+      {/* 🌟 POP-UP STICKERS */}
       <div ref={sticker1} className="absolute top-[25%] left-[20%] z-20 w-20 h-20 md:w-28 md:h-28">
         <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_15px_rgba(245,178,26,0.4)] text-primary fill-current">
           <path d="M45.5 12C63 5 80 15 88 32C96 49 85 70 70 82C55 94 30 90 16 75C2 60 4 35 15 22C26 9 35 16.5 45.5 12Z" />
@@ -125,7 +134,7 @@ export default function HorizontalSlogan() {
         </svg>
       </div>
 
-      {/* DRAWING ARROW */}
+      {/* 🏹 DRAWING ARROW */}
       <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center pt-[15vh]">
         <svg viewBox="0 0 800 400" className="w-full max-w-4xl h-auto">
           <path 
@@ -140,34 +149,55 @@ export default function HorizontalSlogan() {
         </svg>
       </div>
 
-      {/* THE FRAGMENTED HORIZONTAL SCROLLING TEXT */}
+      {/* 🔠 THE FRAGMENTED HORIZONTAL SCROLLING TEXT */}
       <div className="relative z-30 w-full h-[30vh] flex items-center will-change-transform mt-[-10vh]">
-        <div 
-          ref={textRef} 
-          // w-max CRITICAL FIX: Forces the container to fit the entire sentence without cutting off words
-          className="absolute left-[100vw] flex w-max whitespace-nowrap"
-        >
-          {sloganWords.map((wordObj, wordIdx) => (
-            <div key={wordIdx} className="inline-flex mr-[3vw] md:mr-[2vw]">
-              {wordObj.text.split('').map((char, charIdx) => (
-                <span 
-                  key={charIdx} 
-                  // Scaled down text size
-                  className={`scatter-letter inline-block text-[10vw] md:text-[8vw] font-black tracking-[-0.05em] leading-none 
-                    ${wordObj.isBrand ? 'text-primary drop-shadow-[0_0_15px_rgba(245,178,26,0.3)]' : 'text-white'}`}
-                >
-                  {char}
-                </span>
-              ))}
-            </div>
-          ))}
+        
+        {/* 📦 THE NEW STACKED WRAPPER */}
+        <div ref={wrapperRef} className="absolute left-0 flex flex-col w-max">
+          
+          {/* ⚡ LINE 1 */}
+          <div className="flex whitespace-nowrap mb-2 md:mb-4">
+            {line1.map((wordObj, wordIdx) => (
+              <div key={`l1-${wordIdx}`} className="inline-flex mr-[3vw] md:mr-[2vw]">
+                {wordObj.text.split('').map((char, charIdx) => (
+                  <span 
+                    key={`l1-c-${charIdx}`} 
+                    className={`scatter-letter inline-block text-[10vw] md:text-[8vw] font-black tracking-[-0.05em] leading-none 
+                      ${wordObj.isBrand ? 'text-primary drop-shadow-[0_0_15px_rgba(245,178,26,0.3)]' : 'text-white'}`}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          {/* ⚡ LINE 2 (With deeper staircase indent) */}
+          {/* 🎯 NUDGED RIGHT: Changed ml-16 to ml-28 (mobile) and ml-40 to ml-56 (desktop) */}
+          <div className="flex whitespace-nowrap ml-28 md:ml-56">
+            {line2.map((wordObj, wordIdx) => (
+              <div key={`l2-${wordIdx}`} className="inline-flex mr-[3vw] md:mr-[2vw]">
+                {wordObj.text.split('').map((char, charIdx) => (
+                  <span 
+                    key={`l2-c-${charIdx}`} 
+                    className={`scatter-letter inline-block text-[10vw] md:text-[8vw] font-black tracking-[-0.05em] leading-none 
+                      ${wordObj.isBrand ? 'text-primary drop-shadow-[0_0_15px_rgba(245,178,26,0.3)]' : 'text-white'}`}
+                  >
+                    {char}
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
 
-      {/* THE SEQUENCED SUBTEXT */}
+      {/* 📝 THE SEQUENCED SUBTEXT */}
       <div 
         ref={subtextRef}
-        className="absolute bottom-12 md:bottom-20 z-30 max-w-2xl text-center px-6 opacity-0"
+        // 🎯 LIFTED UP: Changed mobile from top-[65%] to top-[55%] to clear the sticker
+        className="absolute top-[62%] md:top-[68%] z-30 max-w-2xl text-center px-6 opacity-0"
       >
         <p className="text-gray-light text-lg md:text-2xl font-medium leading-relaxed">
           Enterprise systems are more complex <span className="italic font-serif font-normal text-white">and</span> more critical than ever. We help brands become leaders in the channels of the new mainstream.

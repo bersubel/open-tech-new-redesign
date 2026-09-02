@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
+import { triggerLogoRain } from '../../utils/logoRain'; // ⬅️ The magic rain import
 
 export default function Footer() {
   const footerRef = useRef(null);
   
-  // Track mouse position relative to the footer container
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
 
   const handleMouseMove = (e) => {
@@ -17,7 +17,10 @@ export default function Footer() {
   };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // ⚡ Trigger the rain overlay, snap to top instantly in the background, then fade out
+    triggerLogoRain(() => {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    });
   };
 
   const socialLinks = [
@@ -55,16 +58,13 @@ export default function Footer() {
         ref={footerRef}
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setMousePos({ x: -1000, y: -1000 })} 
-        // Reduced top padding (pt-16 -> pt-10) to bring everything up
         className="relative w-full rounded-[2.5rem] border border-white/10 bg-[#050505] overflow-hidden flex flex-col pt-10"
       >
         
         {/* --- TOP GRID SECTION --- */}
-        {/* Reduced bottom padding (pb-24 -> pb-10) and gap (gap-12 -> gap-8) to tighten the grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 px-8 md:px-16 pb-10 z-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-4 md:gap-8 px-6 md:px-16 pb-10 z-10">
           
-          {/* Column 1: Logo & Socials */}
-          <div className="flex flex-col justify-between h-full">
+          <div className="col-span-2 md:col-span-1 flex flex-col justify-between h-full">
             <div>
               <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase leading-none">
                 Open<br/>Tech.
@@ -85,8 +85,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 2: Quick Links */}
-          <div className="flex flex-col gap-3">
+          <div className="col-span-1 flex flex-col gap-3">
             <h4 className="text-gray-500 font-medium text-sm mb-1">Quick Links</h4>
             {['Home', 'Our Story', 'Inside Open Tech', 'Products', 'Contact Us'].map((link) => (
               <a key={link} href="#" className="text-white font-medium hover:text-primary transition-colors w-max">
@@ -95,8 +94,7 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* Column 3: Addresses */}
-          <div className="flex flex-col gap-6">
+          <div className="col-span-1 flex flex-col gap-6">
             <div className="flex flex-col gap-1">
               <h4 className="text-gray-500 font-medium text-sm">Head Office</h4>
               <p className="text-white font-medium leading-relaxed text-sm">
@@ -115,8 +113,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Column 4: Partnerships & Contacts */}
-          <div className="flex flex-col gap-6">
+          <div className="col-span-2 md:col-span-1 flex flex-col gap-6">
             <div className="flex flex-col gap-1">
               <h4 className="text-gray-500 font-medium text-sm">Partnerships</h4>
               <p className="text-white font-medium leading-relaxed text-sm">
@@ -129,7 +126,7 @@ export default function Footer() {
               <a href="tel:+18005550199" className="text-white font-medium text-sm hover:text-primary transition-colors">
                 +1 800 555 0199
               </a>
-              <a href="mailto:hello@opentech.com" className="text-white font-medium text-sm hover:text-primary transition-colors">
+              <a href="mailto:hello@opentech.com" className="text-white font-medium text-sm hover:text-primary transition-colors w-max break-all">
                 hello@opentech.com
               </a>
             </div>
@@ -137,7 +134,6 @@ export default function Footer() {
         </div>
 
         {/* --- BOTTOM FLASHLIGHT TYPOGRAPHY --- */}
-        {/* Removed top padding to suck the typography directly up against the grid */}
         <div className="relative w-full flex items-end justify-center mt-auto select-none overflow-hidden">
           
           <h1 className="text-[18vw] leading-[0.75] font-black uppercase tracking-tighter text-[#141414] w-full text-center whitespace-nowrap">
@@ -160,7 +156,7 @@ export default function Footer() {
 
           <button 
             onClick={scrollToTop}
-            className="absolute bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 md:w-16 md:h-16 rounded-full border border-white/10 bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300 z-20 group"
+            className="absolute bottom-6 right-6 md:bottom-10 md:right-10 w-12 h-12 md:w-16 md:h-16 rounded-full border border-white/10 bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-black transition-all duration-300 z-20 group cursor-pointer"
           >
             <svg className="w-5 h-5 md:w-6 md:h-6 transform group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18" />
