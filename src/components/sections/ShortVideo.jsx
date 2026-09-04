@@ -3,14 +3,19 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom'; // ⬅️ React Router added
+import { triggerLogoRain } from '../../utils/logoRain'; // ⬅️ Cinematic transition added
 
 gsap.registerPlugin(ScrollTrigger);
 
+// 🎬 UPDATED DATA: Exactly 6 videos loaded seamlessly
 const initialCards = [
-  { id: 1, src: '/v1.mp4', label: 'project one', sticker: '🚀' },
-  { id: 2, src: '/v2.mp4', label: 'project two', sticker: '🔥' },
-  { id: 3, src: '/v3.mp4', label: 'project three', sticker: '💡' },
-  { id: 4, src: '/v4.mp4', label: 'project four', sticker: '⚡' },
+  { id: 1, src: '/vd1.mp4', label: 'project one', sticker: '🚀' },
+  { id: 2, src: '/vd2.mp4', label: 'project two', sticker: '🔥' },
+  { id: 3, src: '/vd3.mp4', label: 'project three', sticker: '💡' },
+  { id: 4, src: '/vd4.mp4', label: 'project four', sticker: '⚡' },
+  { id: 5, src: '/vd5.mp4', label: 'project five', sticker: '🎬' },
+  { id: 6, src: '/vd6.mp4', label: 'project six', sticker: '✨' },
 ];
 
 export default function ShortVideo() {
@@ -18,12 +23,15 @@ export default function ShortVideo() {
   const bgContainerRef = useRef(null);
   const introTextRef = useRef(null);
   const cardStackRef = useRef(null);
+  const moreBtnRef = useRef(null); 
   
   const videoRefs = useRef({});
   
   const [cards, setCards] = useState(initialCards);
   const [isMuted, setIsMuted] = useState(false); 
   const [isInView, setIsInView] = useState(false); 
+
+  const navigate = useNavigate(); // ⬅️ Initialize navigation
 
   // --- 1. INTERSECTION OBSERVER ---
   useEffect(() => {
@@ -59,6 +67,9 @@ export default function ShortVideo() {
 
   // --- 3. GSAP SCROLL ANIMATION ---
   useGSAP(() => {
+    // Hide the drawing arrow initially
+    gsap.set('.more-arrow-path', { strokeDasharray: 300, strokeDashoffset: 300 });
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
@@ -69,6 +80,7 @@ export default function ShortVideo() {
       }
     });
 
+    // 1. Expand Background
     tl.to(bgContainerRef.current, {
       width: "100vw",
       height: "100vh",
@@ -77,16 +89,32 @@ export default function ShortVideo() {
       duration: 1
     }, 0);
 
+    // 2. Hide Intro Text
     tl.to(introTextRef.current, {
       opacity: 0,
       scale: 1.2,
       duration: 0.5
     }, 0);
 
+    // 3. Bring up the Card Stack
     tl.fromTo(cardStackRef.current, 
       { opacity: 0, y: 150 }, 
       { opacity: 1, y: 0, duration: 1, ease: "back.out(1.2)" }, 
       0.8 
+    );
+
+    // 4. Draw the dynamic arrow swooping down
+    tl.to('.more-arrow-path', {
+      strokeDashoffset: 0,
+      duration: 0.8,
+      ease: "power2.out"
+    }, 1.4); // Starts exactly as the deck is settling into place
+
+    // 5. Pop in the Premium Button
+    tl.fromTo(moreBtnRef.current,
+      { opacity: 0, scale: 0.5, y: 30 },
+      { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: "back.out(1.8)" },
+      1.8 // Bounces in right as the arrow finishes drawing
     );
 
     return () => tl.kill();
@@ -106,8 +134,8 @@ export default function ShortVideo() {
 
   // Toggle mute function
   const toggleMute = (e) => {
-    e.stopPropagation(); // Prevents dragging when clicking the button
-    setIsMuted(prev => !prev); // Reliably toggles the previous state
+    e.stopPropagation(); 
+    setIsMuted(prev => !prev); 
   };
 
   return (
@@ -150,8 +178,9 @@ export default function ShortVideo() {
             {cards.map((card, index) => {
               const isFront = index === 0;
               
-              const rotation = index === 0 ? 0 : index === 1 ? 6 : index === 2 ? -6 : 12;
-              const xOffset = index === 0 ? 0 : index === 1 ? 60 : index === 2 ? -60 : 120;
+              // 📐 DYNAMIC MATH FOR 6 CARDS: Perfectly alternates left/right with increasing depth
+              const rotation = index === 0 ? 0 : index === 1 ? 5 : index === 2 ? -5 : index === 3 ? 10 : index === 4 ? -10 : 15;
+              const xOffset = index === 0 ? 0 : index === 1 ? 50 : index === 2 ? -50 : index === 3 ? 100 : index === 4 ? -100 : 150;
               const scale = 1 - (index * 0.05);
               const zIndex = cards.length - index;
 
@@ -180,12 +209,11 @@ export default function ShortVideo() {
                     src={card.src}
                     loop 
                     playsInline
-                    className="absolute inset-0 w-full h-full object-cover bg-black-soft pointer-events-none"
+                    className="absolute inset-0 w-full h-full object-cover bg-black pointer-events-none"
                   />
                   
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/30 pointer-events-none" />
                   
-                  {/* FIXED MUTE BUTTON: Removed the onClick handler that was causing the double-fire issue */}
                   <div 
                     onPointerDownCapture={toggleMute}
                     className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white cursor-pointer hover:bg-primary hover:text-black transition-colors duration-300"
@@ -218,9 +246,51 @@ export default function ShortVideo() {
           </AnimatePresence>
         </div>
         
-        <p className="text-gray-light font-medium tracking-widest uppercase text-xs mt-12 animate-pulse">
+        <p className="text-gray-400 font-medium tracking-widest uppercase text-xs mt-12 animate-pulse">
           Drag to shuffle
         </p>
+      </div>
+
+      {/* 🚀 NEW: THE "MORE OF OUR WORKS" ANIMATED BUTTON & ARROW */}
+      <div className="absolute bottom-10 right-6 md:bottom-16 md:right-16 z-30 flex flex-col items-center md:items-end pointer-events-none">
+        
+        {/* The Animated Arrow (Hidden on mobile to save space) */}
+        <div className="hidden md:block w-24 h-24 mb-2 mr-12">
+          <svg viewBox="0 0 150 150" className="w-full h-full text-primary drop-shadow-[0_0_15px_rgba(245,178,26,0.5)]">
+            {/* The swooping line */}
+            <path className="more-arrow-path" d="M20,20 C 20,80 60,130 120,130" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+            {/* The arrowhead */}
+            <path className="more-arrow-path" d="M 100,110 L 125,130 L 100,150" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+
+        {/* 🚀 ROUTED BUTTON: Intercepts click, drops rain, navigates to /works */}
+        <a
+          ref={moreBtnRef}
+          href="/works"
+          onClick={(e) => {
+            e.preventDefault();
+            triggerLogoRain(() => {
+              navigate('/works');
+              window.scrollTo(0, 0);
+            });
+          }}
+          className="group relative pointer-events-auto inline-flex items-center justify-center gap-3 px-6 py-3.5 md:px-8 md:py-4 rounded-full overflow-hidden border border-white/20 bg-white/5 backdrop-blur-md cursor-pointer transition-all duration-300 hover:border-primary hover:shadow-[0_0_30px_rgba(245,178,26,0.3)] hover:scale-105"
+        >
+          {/* Expanding Primary Color Fill */}
+          <div className="absolute inset-0 w-0 bg-primary transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:w-full"></div>
+          
+          <span className="relative z-10 font-bold uppercase tracking-widest text-xs md:text-sm text-white group-hover:text-black transition-colors duration-300">
+            More of our works
+          </span>
+          
+          <span className="relative z-10 w-5 h-5 flex items-center justify-center text-white group-hover:text-black transform transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-x-1 group-hover:-rotate-45">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </span>
+        </a>
       </div>
 
     </section>

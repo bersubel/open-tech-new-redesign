@@ -1,8 +1,11 @@
 import { useRef, useState } from 'react';
-import { triggerLogoRain } from '../../utils/logoRain'; // ⬅️ The magic rain import
+import { useNavigate, useLocation } from 'react-router-dom';
+import { triggerLogoRain } from '../../utils/logoRain';
 
 export default function Footer() {
   const footerRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
   
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
 
@@ -16,8 +19,25 @@ export default function Footer() {
     }
   };
 
+  // 🧠 THE MASTER TRANSITION LOGIC
+  const handleNavigation = (e, path) => {
+    e.preventDefault();
+
+    if (location.pathname === path) {
+      // If already on the page, just trigger rain and scroll to top
+      triggerLogoRain(() => {
+        window.scrollTo({ top: 0, behavior: 'auto' }); 
+      });
+    } else {
+      // Intercept route change, trigger rain, then change page
+      triggerLogoRain(() => {
+        navigate(path);
+        window.scrollTo(0, 0);
+      });
+    }
+  };
+
   const scrollToTop = () => {
-    // ⚡ Trigger the rain overlay, snap to top instantly in the background, then fade out
     triggerLogoRain(() => {
       window.scrollTo({ top: 0, behavior: 'auto' });
     });
@@ -51,6 +71,16 @@ export default function Footer() {
     }
   ];
 
+  // Complete and proper routing data
+  const quickLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'Services', path: '/services' },
+    { name: 'Works', path: '/works' },
+    { name: 'Clients / Partners', path: '/clients' },
+    { name: 'About Us', path: '/about' },
+    { name: 'Contact Us', path: '/contact' }
+  ];
+
   return (
     <footer className="w-full bg-black py-4 px-4 md:px-6">
       
@@ -64,6 +94,7 @@ export default function Footer() {
         {/* --- TOP GRID SECTION --- */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-4 md:gap-8 px-6 md:px-16 pb-10 z-10">
           
+          {/* Column 1: Logo & Socials */}
           <div className="col-span-2 md:col-span-1 flex flex-col justify-between h-full">
             <div>
               <h2 className="text-4xl md:text-5xl font-black text-primary tracking-tighter uppercase leading-none">
@@ -85,49 +116,45 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* Column 2: Quick Links (Updated with Full Routing) */}
           <div className="col-span-1 flex flex-col gap-3">
             <h4 className="text-gray-500 font-medium text-sm mb-1">Quick Links</h4>
-            {['Home', 'Our Story', 'Inside Open Tech', 'Products', 'Contact Us'].map((link) => (
-              <a key={link} href="#" className="text-white font-medium hover:text-primary transition-colors w-max">
-                {link}
+            {quickLinks.map((link) => (
+              <a 
+                key={link.name} 
+                href={link.path} 
+                onClick={(e) => handleNavigation(e, link.path)}
+                className="text-white font-medium hover:text-primary transition-colors w-max cursor-pointer"
+              >
+                {link.name}
               </a>
             ))}
           </div>
 
+          {/* Column 3: Location */}
           <div className="col-span-1 flex flex-col gap-6">
             <div className="flex flex-col gap-1">
-              <h4 className="text-gray-500 font-medium text-sm">Head Office</h4>
+              <h4 className="text-gray-500 font-medium text-sm">Location</h4>
               <p className="text-white font-medium leading-relaxed text-sm">
-                1000 4th Ave,<br />
-                Seattle, WA 98104,<br />
-                United States
-              </p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h4 className="text-gray-500 font-medium text-sm">Development Center</h4>
-              <p className="text-white font-medium leading-relaxed text-sm">
-                Bellevue Way NE,<br />
-                Bellevue, WA 98004,<br />
-                United States
+                Abuka Building, 6th Floor,<br />
+                Lemi Kura Sub City,<br />
+                Addis Ababa, Ethiopia
               </p>
             </div>
           </div>
 
+          {/* Column 4: Contacts */}
           <div className="col-span-2 md:col-span-1 flex flex-col gap-6">
             <div className="flex flex-col gap-1">
-              <h4 className="text-gray-500 font-medium text-sm">Partnerships</h4>
-              <p className="text-white font-medium leading-relaxed text-sm">
-                Open Tech Global<br />
-                Ventures LLC
-              </p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h4 className="text-gray-500 font-medium text-sm">Contacts</h4>
-              <a href="tel:+18005550199" className="text-white font-medium text-sm hover:text-primary transition-colors">
-                +1 800 555 0199
+              <h4 className="text-gray-500 font-medium text-sm">Contact Us</h4>
+              <a href="tel:+251989165874" className="text-white font-medium text-sm hover:text-primary transition-colors">
+                +251 989 165 874
               </a>
-              <a href="mailto:hello@opentech.com" className="text-white font-medium text-sm hover:text-primary transition-colors w-max break-all">
-                hello@opentech.com
+              <a href="tel:+251940091308" className="text-white font-medium text-sm hover:text-primary transition-colors">
+                +251 940 091 308
+              </a>
+              <a href="mailto:Opentechnologyplc@gmail.com" className="text-white font-medium text-sm hover:text-primary transition-colors w-max break-all mt-2">
+                Opentechnologyplc@gmail.com
               </a>
             </div>
           </div>
@@ -151,7 +178,7 @@ export default function Footer() {
           </h1>
 
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 text-xs md:text-sm font-medium z-20 whitespace-nowrap">
-            ©2026 Open Tech Inc. All Rights Reserved.
+            ©2026 Open Technology P.L.C. All Rights Reserved.
           </div>
 
           <button 

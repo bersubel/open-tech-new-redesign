@@ -2,6 +2,8 @@ import { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import { useNavigate } from 'react-router-dom'; // ⬅️ Import router navigation
+import { triggerLogoRain } from '../../utils/logoRain'; // ⬅️ Import the master transition
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,11 +11,13 @@ export default function HorizontalSlogan() {
   const sectionRef = useRef(null);
   const wrapperRef = useRef(null); 
   const arrowRef = useRef(null);
-  const subtextRef = useRef(null);
+  const bottomContentRef = useRef(null); 
   
   const sticker1 = useRef(null);
   const sticker2 = useRef(null);
   const sticker3 = useRef(null);
+
+  const navigate = useNavigate(); // ⬅️ Initialize the router navigation hook
 
   useGSAP(() => {
     // 1. Prepare Arrow
@@ -61,7 +65,7 @@ export default function HorizontalSlogan() {
       opacity: 1,
       scale: 1,
       rotateZ: 0,
-      stagger: 0.15, 
+      stagger: 0.1, 
       ease: "back.out(1.5)",
       duration: 1.5 
     }, 0.5); 
@@ -78,10 +82,10 @@ export default function HorizontalSlogan() {
       ease: "power2.inOut"
     }, 7.5); 
 
-    // STEP 5: Subtext Reveal 
-    tl.fromTo(subtextRef.current, 
-      { opacity: 0, y: 30 }, 
-      { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, 
+    // STEP 5: Bottom Content Reveal (Text + Button)
+    tl.fromTo(bottomContentRef.current, 
+      { opacity: 0, y: 40 }, 
+      { opacity: 1, y: 0, duration: 1.5, ease: "power3.out" }, 
       9 
     );
 
@@ -91,15 +95,18 @@ export default function HorizontalSlogan() {
   // ✂️ SPLIT THE WORDS INTO TWO LINES
   const line1 = [
     { text: "we", isBrand: false },
-    { text: "engineer", isBrand: false },
-    { text: "software", isBrand: true }
+    { text: "build", isBrand: false },
+    { text: "brands", isBrand: true },
+    { text: "in", isBrand: false },
+    { text: "the", isBrand: false }
   ];
 
   const line2 = [
-    { text: "for", isBrand: false },
-    { text: "the", isBrand: false },
-    { text: "new", isBrand: false },
-    { text: "enterprise", isBrand: true }
+    { text: "center", isBrand: false },
+    { text: "of", isBrand: false },
+    { text: "their", isBrand: false },
+    { text: "target", isBrand: true },
+    { text: "market", isBrand: true }
   ];
 
   return (
@@ -162,7 +169,7 @@ export default function HorizontalSlogan() {
                 {wordObj.text.split('').map((char, charIdx) => (
                   <span 
                     key={`l1-c-${charIdx}`} 
-                    className={`scatter-letter inline-block text-[10vw] md:text-[8vw] font-black tracking-[-0.05em] leading-none 
+                    className={`scatter-letter inline-block text-[9vw] md:text-[7vw] font-black tracking-[-0.05em] leading-none 
                       ${wordObj.isBrand ? 'text-primary drop-shadow-[0_0_15px_rgba(245,178,26,0.3)]' : 'text-white'}`}
                   >
                     {char}
@@ -172,15 +179,14 @@ export default function HorizontalSlogan() {
             ))}
           </div>
 
-          {/* ⚡ LINE 2 (With deeper staircase indent) */}
-          {/* 🎯 NUDGED RIGHT: Changed ml-16 to ml-28 (mobile) and ml-40 to ml-56 (desktop) */}
+          {/* ⚡ LINE 2 */}
           <div className="flex whitespace-nowrap ml-28 md:ml-56">
             {line2.map((wordObj, wordIdx) => (
               <div key={`l2-${wordIdx}`} className="inline-flex mr-[3vw] md:mr-[2vw]">
                 {wordObj.text.split('').map((char, charIdx) => (
                   <span 
                     key={`l2-c-${charIdx}`} 
-                    className={`scatter-letter inline-block text-[10vw] md:text-[8vw] font-black tracking-[-0.05em] leading-none 
+                    className={`scatter-letter inline-block text-[9vw] md:text-[7vw] font-black tracking-[-0.05em] leading-none 
                       ${wordObj.isBrand ? 'text-primary drop-shadow-[0_0_15px_rgba(245,178,26,0.3)]' : 'text-white'}`}
                   >
                     {char}
@@ -193,15 +199,42 @@ export default function HorizontalSlogan() {
         </div>
       </div>
 
-      {/* 📝 THE SEQUENCED SUBTEXT */}
+      {/* 📝 THE SEQUENCED SUBTEXT & BUTTON */}
       <div 
-        ref={subtextRef}
-        // 🎯 LIFTED UP: Changed mobile from top-[65%] to top-[55%] to clear the sticker
-        className="absolute top-[62%] md:top-[68%] z-30 max-w-2xl text-center px-6 opacity-0"
+        ref={bottomContentRef}
+        className="absolute top-[60%] md:top-[65%] z-30 max-w-4xl flex flex-col items-center text-center px-6 opacity-0"
       >
-        <p className="text-gray-light text-lg md:text-2xl font-medium leading-relaxed">
-          Enterprise systems are more complex <span className="italic font-serif font-normal text-white">and</span> more critical than ever. We help brands become leaders in the channels of the new mainstream.
+        <p className="text-gray-300 text-sm md:text-base lg:text-lg font-medium leading-relaxed max-w-3xl">
+          Open Technology is an all-in-one creative, marketing, event, software & app development, web development, and production company based in Addis Ababa, Ethiopia. The company combines innovative digital solutions with VFX, 3D animation, cinematic production, and strategic marketing to create transformative brand experiences.
         </p>
+        
+        {/* 🚀 THE EXPLORE BUTTON (WITH TRANSITION) */}
+        <a 
+          href="/about"
+          onClick={(e) => {
+            e.preventDefault();
+            // Trigger the cinematic transition, then navigate to the new page
+            triggerLogoRain(() => {
+              navigate('/about');
+              window.scrollTo(0, 0); // Snap to the top of the new page
+            });
+          }}
+          className="group relative inline-flex items-center justify-center gap-3 mt-6 md:mt-8 px-8 py-3.5 rounded-full overflow-hidden border border-white/20 bg-white/5 backdrop-blur-sm cursor-pointer transition-all duration-300 hover:border-primary"
+        >
+          {/* Animated Background Fill */}
+          <div className="absolute inset-0 w-0 bg-primary transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:w-full"></div>
+          
+          <span className="relative z-10 font-bold uppercase tracking-widest text-xs md:text-sm text-white group-hover:text-black transition-colors duration-300">
+            Explore
+          </span>
+          
+          <span className="relative z-10 w-5 h-5 flex items-center justify-center text-white group-hover:text-black transform transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-x-1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </span>
+        </a>
       </div>
 
     </section>

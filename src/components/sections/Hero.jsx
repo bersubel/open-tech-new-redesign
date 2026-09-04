@@ -66,13 +66,14 @@ export default function Hero() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.6)_100%)] pointer-events-none" />
       </div>
 
-      {/* 2. LOWERED TYPOGRAPHY */}
+      {/* 2. LOWERED TYPOGRAPHY (UPDATED TO BLUEPRINT MESSAGING) */}
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-13 md:justify-center md:pb-0 md:pt-[50vh] pointer-events-none px-4">
         <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-white text-5xl md:text-[7vw] leading-[1.1] md:leading-[1.05] font-black tracking-tighter">
-            we engineer <span className="font-serif italic font-normal px-2">Software</span> <br />
-            for the <span className="relative inline-block text-primary">
-              enterprise
+            Empowering <span className="font-serif italic font-normal px-2">brands</span> <br />
+            through <span className="relative inline-block text-primary">
+              open solutions
+              {/* The hand-drawn underline now wraps "open solutions" */}
               <svg className="absolute w-[110%] h-auto -left-[5%] -bottom-2 md:-bottom-4 text-white" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2 15C50 4 150 -5 298 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
               </svg>
@@ -87,7 +88,6 @@ export default function Hero() {
           e.stopPropagation(); // Prevents triggering the section background click twice
           toggleAudio();
         }}
-        // Positioned exactly where your red circle is (bottom-36 left-4)
         className="absolute z-50 bottom-36 left-4 w-16 h-16 flex items-center justify-center md:hidden active:scale-95 transition-transform"
       >
         <svg className="absolute inset-0 w-full h-full text-primary drop-shadow-xl" viewBox="0 0 512 512" fill="currentColor" preserveAspectRatio="xMidYMid meet">
