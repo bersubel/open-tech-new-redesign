@@ -14,7 +14,7 @@ const teamProfiles = {
   nahom: { img: "/nahome.png", name: "Nahom Tesfaye", role: "Marketing Dir / DP", slug: "/team/nahom-tesfaye" },
   yonas: { img: "/yonas.png", name: "Yonas Kebede", role: "Creative / AI Dir", slug: "/team/yonas-kebede" },
   nathenael: { img: "/nathnael.png", name: "Nathenael Nasir", role: "General Manager", slug: "/team/nathenael-nasir" },
-  nasson: { img: "/nasson.png", name: "Nasson", role: "Digital Lead", slug: "/team/nasson" }, 
+  nasson: { img: "/nasson.png", name: "Nahom Nasir", role: "Live Stream Expert", slug: "/team/nasson" }, 
 };
 
 const teamSlots = [

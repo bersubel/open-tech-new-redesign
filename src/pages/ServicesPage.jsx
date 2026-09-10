@@ -8,7 +8,7 @@ import { triggerLogoRain } from '../utils/logoRain';
 gsap.registerPlugin(ScrollTrigger);
 
 // ==========================================
-// 1. FULL BLUEPRINT SERVICES DATA
+// 1. FULL BLUEPRINT SERVICES DATA (Updated with Images)
 // ==========================================
 const fullServices = [
   {
@@ -16,77 +16,88 @@ const fullServices = [
     title: 'Software & Systems Development',
     desc: 'Custom Enterprise Resource Planning (ERP) engines, Customer Relationship Management (CRM) platforms, custom iOS/Android mobile application development, and web-based business tools.',
     icon: '💻',
-    category: 'Engineering'
+    category: 'Engineering',
+    img: '/service-software.jpg' // <-- ADD YOUR IMAGE PATHS HERE
   },
   {
     id: '02',
     title: 'Web & Digital Development',
     desc: 'Custom website engineering, e-commerce architectures, UI/UX design, performance optimization, and technical maintenance.',
     icon: '🌐',
-    category: 'Engineering'
+    category: 'Engineering',
+    img: '/service-web.jpg'
   },
   {
     id: '03',
     title: 'Digital Marketing & Ads',
     desc: 'Social media management, paid advertising campaigns, content strategy, copy variations, performance tracking, and digital brand growth.',
     icon: '📈',
-    category: 'Growth'
+    category: 'Growth',
+    img: '/service-marketing.jpg'
   },
   {
     id: '04',
     title: 'Branding & Creative Strategy',
     desc: 'Brand positioning, visual identity systems, campaign architecture, and unified creative communication.',
     icon: '✨',
-    category: 'Identity'
+    category: 'Identity',
+    img: '/service-branding.jpg'
   },
   {
     id: '05',
     title: 'Cinematic Production',
     desc: 'Commercial advertising, corporate profiles, mini-documentaries, music videos, scriptwriting, filming, color grading, and audio post-production.',
     icon: '🎬',
-    category: 'Production'
+    category: 'Production',
+    img: '/service-production.jpg'
   },
   {
     id: '06',
     title: 'AI-Powered Video Production',
     desc: 'Generative AI workflows, synthetic asset generation, visual acceleration, and concept creation.',
     icon: '🤖',
-    category: 'Innovation'
+    category: 'Innovation',
+    img: '/service-ai.jpg'
   },
   {
     id: '07',
     title: 'VFX, CGI & 3D Animation',
     desc: 'Advanced compositing, visual effects integration, 3D modeling, CGI, and motion graphics.',
     icon: '🌪️',
-    category: 'Visual Effects'
+    category: 'Visual Effects',
+    img: '/service-vfx.jpg'
   },
   {
     id: '08',
     title: 'Event Organization',
     desc: 'End-to-end event design, physical stage builds, multimedia execution, and promotional coverage.',
     icon: '🎟️',
-    category: 'Experiences'
+    category: 'Experiences',
+    img: '/service-event.jpg'
   },
   {
     id: '09',
     title: 'Influencer & Strategic Partnerships',
     desc: 'Talent management, creator alignment, brand integration, and outreach expansion.',
     icon: '🤝',
-    category: 'Talent'
+    category: 'Talent',
+    img: '/service-talent.jpg'
   },
   {
     id: '10',
     title: 'Live Streaming',
     desc: 'Professional live-streaming solutions for corporate events, conferences, product launches, meetings, and special events across digital platforms.',
     icon: '📡',
-    category: 'Broadcasting'
+    category: 'Broadcasting',
+    img: '/service-stream.jpg'
   },
   {
     id: '11',
     title: 'Broadcast Management',
     desc: 'End-to-end broadcast process—from production coordination and technical setup to live transmission and platform management.',
     icon: '🎛️',
-    category: 'Broadcasting'
+    category: 'Broadcasting',
+    img: '/service-broadcast.jpg'
   }
 ];
 
@@ -131,9 +142,11 @@ export default function ServicesPage() {
           onToggle: (self) => {
             if (self.isActive) {
               setActiveIndex(index);
-              gsap.fromTo('.dynamic-number', 
+              
+              // Animate both the image and the number
+              gsap.fromTo('.dynamic-content-layer', 
                 { scale: 0.8, opacity: 0, y: 50 }, 
-                { scale: 1, opacity: 1, y: 0, duration: 0.6, ease: "back.out(1.5)" }
+                { scale: 1, opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
               );
             }
           }
@@ -148,7 +161,6 @@ export default function ServicesPage() {
       const mobileCards = gsap.utils.toArray('.mobile-service-card');
 
       mobileCards.forEach((card, index) => {
-        // Scrubbed entrance pop
         gsap.fromTo(card, 
           { y: 50, opacity: 0.3, scale: 0.95 },
           {
@@ -165,7 +177,6 @@ export default function ServicesPage() {
           }
         );
 
-        // Update the active index for the sticky mobile HUD
         ScrollTrigger.create({
           trigger: card,
           start: "top 55%",
@@ -189,7 +200,6 @@ export default function ServicesPage() {
           HERO SECTION
       ========================================== */}
       <section className="relative w-full h-[50vh] md:h-[70vh] flex flex-col items-center justify-center pt-24 px-6 overflow-hidden">
-        {/* Cinematic glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] bg-primary rounded-full mix-blend-screen filter blur-[220px] opacity-[0.14] pointer-events-none" />
         
         <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[7vw] font-black uppercase tracking-tighter leading-[0.9] text-center z-10">
@@ -222,7 +232,6 @@ export default function ServicesPage() {
               </span>
             </div>
             
-            {/* Live Progress Bar */}
             <div className="w-14 h-1.5 bg-white/20 rounded-full overflow-hidden flex-shrink-0">
               <div 
                 className="h-full bg-primary transition-all duration-300 ease-out rounded-full"
@@ -235,7 +244,7 @@ export default function ServicesPage() {
         <div className="max-w-[1400px] mx-auto w-full flex flex-col md:flex-row relative">
           
           {/* ==========================================
-              LEFT: SERVICE CARDS (Dynamic Mobile & Desktop)
+              LEFT: SERVICE CARDS 
           ========================================== */}
           <div ref={leftColRef} className="w-full md:w-[55%] flex flex-col px-4 md:px-12 py-6 md:py-40 gap-6 md:gap-32">
             {fullServices.map((service, index) => {
@@ -250,13 +259,11 @@ export default function ServicesPage() {
                       : 'border-black/5 md:border-transparent'
                   }`}
                 >
-                  {/* Watermark Ghost Number (Mobile only) */}
                   <span className="block md:hidden absolute -right-3 -bottom-5 text-black/[0.04] font-black text-8xl select-none pointer-events-none">
                     {service.id}
                   </span>
 
                   <div>
-                    {/* Top Metadata Row */}
                     <div className="flex items-center justify-between mb-3">
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest bg-[#F4F3EE] md:bg-white border border-black/10">
                         <span>{service.icon}</span>
@@ -268,18 +275,15 @@ export default function ServicesPage() {
                       </span>
                     </div>
 
-                    {/* Title */}
                     <h3 className="text-2xl sm:text-3xl md:text-5xl font-black uppercase tracking-tighter leading-[1.1] text-black">
                       {service.title}
                     </h3>
 
-                    {/* Description */}
                     <p className="text-sm sm:text-base md:text-2xl font-medium text-gray-600 leading-relaxed max-w-lg mt-3">
                       {service.desc}
                     </p>
                   </div>
 
-                  {/* Mobile-only Bottom Quick Indicator */}
                   <div className="md:hidden flex items-center justify-between pt-4 mt-4 border-t border-black/5">
                     <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
                       Open Tech Capability
@@ -298,25 +302,38 @@ export default function ServicesPage() {
             
             <div className="relative w-full aspect-square rounded-[3rem] bg-white border border-black/5 shadow-2xl flex flex-col items-center justify-center overflow-hidden">
               
-              <svg className="absolute inset-0 w-[150%] h-[150%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[#F4F3EE] animate-spin-slow pointer-events-none" viewBox="0 0 100 100" fill="currentColor">
-                <path d="M50,10 C70,10 90,30 90,50 C90,70 70,90 50,90 C30,90 10,70 10,50 C10,30 30,10 50,10 Z" />
-              </svg>
+              {/* 🎨 NEW: The Layered Image and Number Container */}
+              <div className="dynamic-content-layer absolute inset-0 w-full h-full flex items-center justify-center overflow-hidden">
+                
+                {/* 1. Background Image */}
+                <div 
+                  className="absolute inset-0 w-full h-full bg-cover bg-center transition-all duration-700 scale-105"
+                  style={{ backgroundImage: `url(${fullServices[activeIndex].img})` }}
+                />
+                
+                {/* 2. Image Overlay (To ensure number is readable) */}
+                <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]" />
 
-              <div className="dynamic-number relative z-10 text-[18vw] font-black text-black leading-none tracking-tighter drop-shadow-xl">
-                {fullServices[activeIndex].id}
+                {/* 3. The Massive Number */}
+                <div className="relative z-10 text-[22vw] font-black text-black leading-none tracking-tighter drop-shadow-2xl mix-blend-overlay opacity-90">
+                  {fullServices[activeIndex].id}
+                </div>
+                
               </div>
 
+              {/* Title Badge overlay at bottom */}
               <div className="absolute bottom-10 w-full text-center px-8 z-20">
-                <p className="text-primary font-bold uppercase tracking-widest text-sm bg-black text-white inline-block px-4 py-2 rounded-full shadow-lg">
+                <p className="text-primary font-bold uppercase tracking-widest text-sm bg-black/90 backdrop-blur-md text-white inline-block px-4 py-2 rounded-full shadow-lg border border-white/10">
                   {fullServices[activeIndex].title}
                 </p>
               </div>
 
+              {/* Scroll Indicators at top right */}
               <div className="absolute top-10 right-10 flex flex-col gap-2 z-20">
                 {fullServices.map((_, i) => (
                   <div 
                     key={i} 
-                    className={`w-2 rounded-full transition-all duration-500 ${i === activeIndex ? 'h-8 bg-primary' : 'h-2 bg-black/10'}`}
+                    className={`w-2 rounded-full transition-all duration-500 shadow-md ${i === activeIndex ? 'h-8 bg-primary' : 'h-2 bg-black/30 backdrop-blur-sm'}`}
                   />
                 ))}
               </div>

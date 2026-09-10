@@ -136,7 +136,7 @@ export default function Footer() {
             <div className="flex flex-col gap-1">
               <h4 className="text-gray-500 font-medium text-sm">Location</h4>
               <p className="text-white font-medium leading-relaxed text-sm">
-                Abuka Building, 6th Floor,<br />
+                Abuki Building, 4th Floor, 404,<br />
                 Lemi Kura Sub City,<br />
                 Addis Ababa, Ethiopia
               </p>

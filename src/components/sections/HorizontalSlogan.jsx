@@ -205,7 +205,7 @@ export default function HorizontalSlogan() {
         className="absolute top-[60%] md:top-[65%] z-30 max-w-4xl flex flex-col items-center text-center px-6 opacity-0"
       >
         <p className="text-gray-300 text-sm md:text-base lg:text-lg font-medium leading-relaxed max-w-3xl">
-          Open Technology is an all-in-one creative, marketing, event, software & app development, web development, and production company based in Addis Ababa, Ethiopia. The company combines innovative digital solutions with VFX, 3D animation, cinematic production, and strategic marketing to create transformative brand experiences.
+          Open Technology PLC is an all-in-one creative, marketing, event, software & app development, web development, and production company based in Addis Ababa, Ethiopia. The company combines innovative digital solutions with VFX, 3D animation, cinematic production, and strategic marketing to create transformative brand experiences.
         </p>
         
         {/* 🚀 THE EXPLORE BUTTON (WITH TRANSITION) */}

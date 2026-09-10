@@ -1,34 +1,11 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { useNavigate } from 'react-router-dom';
 import { triggerLogoRain } from '../utils/logoRain';
 
-// ==========================================
-// 1. DATA SETUP
-// ==========================================
-const contactData = [
-  { 
-    label: "Email", 
-    value: "Opentechnologyplc@gmail.com", 
-    link: "mailto:Opentechnologyplc@gmail.com" 
-  },
-  { 
-    label: "Website", 
-    value: "Opentechnologyplc.com", 
-    link: "https://opentechnologyplc.com" 
-  },
-  { 
-    label: "Phone", 
-    value: "+251 989 165 874 / +251 940 091 308", 
-    link: "tel:+251989165874" 
-  },
-  { 
-    label: "Location", 
-    value: "Abuka Building, 6th Floor, Lemi Kura Sub City, Addis Ababa, Ethiopia", 
-    link: null // No link for address, just text
-  }
-];
+gsap.registerPlugin(ScrollTrigger);
 
 const socials = [
   {
@@ -45,11 +22,6 @@ const socials = [
     name: "Telegram",
     url: "#",
     icon: <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.888-.662 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-  },
-  {
-    name: "Behance",
-    url: "#",
-    icon: <path d="M22 7h-7v-2h7v2zM11.5 14.6c1.2-.4 2-1.4 2-2.8 0-2.3-1.6-3.8-4-3.8h-5v11h5.3c2.7 0 4.5-1.5 4.5-4 0-1.8-1-3.2-2.8-3.4zm-4.5-4.1h2.2c1.2 0 1.9.6 1.9 1.5 0 .9-.7 1.5-1.9 1.5h-2.2v-3zm2.5 6.5h-2.5v-3.3h2.6c1.3 0 2.2.6 2.2 1.7 0 1.1-1 1.6-2.3 1.6zM24 14.8c0-3.6-2.5-6.8-6.5-6.8-4.2 0-7 3.3-7 7.5s2.8 7.5 7.1 7.5c3.2 0 5.6-1.7 6.5-4.6h-3.1c-.5 1-1.6 1.7-3.1 1.7-1.9 0-3.1-1.2-3.3-3h9.4c0-.2.0-.3.0-.3zM13.8 13.1c.3-1.6 1.5-2.7 3.3-2.7 1.7 0 2.8 1 3.1 2.7h-6.4z"/>
   }
 ];
 
@@ -57,121 +29,256 @@ export default function ContactPage() {
   const containerRef = useRef(null);
   const navigate = useNavigate();
 
+  // FORM STATE LOGIC
+  const [formData, setFormData] = useState({ company: '', email: '', message: '' });
+  const [formStatus, setFormStatus] = useState('idle'); // 'idle' | 'submitting' | 'success'
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setFormStatus('submitting');
+
+    // Simulate sending data (5 second delay)
+    setTimeout(() => {
+      // Clear the form fields
+      setFormData({ company: '', email: '', message: '' });
+      // Set status to success
+      setFormStatus('success');
+
+      // Optional: Hide the success message after 4 seconds to reset the form
+      setTimeout(() => {
+        setFormStatus('idle');
+      }, 4000);
+    }, 5000);
+  };
+
   useGSAP(() => {
-    // 1. Cinematic Text Reveal (Left Side)
+    // 1. Cinematic Text Reveal 
     gsap.fromTo('.reveal-text', 
       { y: 100, opacity: 0, rotateX: 45 },
       { y: 0, opacity: 1, rotateX: 0, duration: 1.2, stagger: 0.1, ease: 'power4.out', delay: 0.2 }
     );
 
-    // 2. Info List Reveal (Right Side)
-    gsap.fromTo('.info-row',
-      { x: 50, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1, stagger: 0.15, ease: 'power3.out', delay: 0.8 }
+    // 2. Bento Grid Reveal
+    gsap.fromTo('.bento-card',
+      { y: 80, opacity: 0, scale: 0.95 },
+      { y: 0, opacity: 1, scale: 1, duration: 1.2, stagger: 0.15, ease: 'power4.out', delay: 0.5 }
     );
 
-    // 3. Socials Reveal (Bottom Left)
+    // 3. Lead Generation Cards Reveal
+    gsap.fromTo('.lead-card',
+      { y: 100, opacity: 0 },
+      { 
+        y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: 'power3.out',
+        scrollTrigger: { trigger: '.lead-section', start: 'top 85%' }
+      }
+    );
+
+    // 4. Socials Reveal
     gsap.fromTo('.social-icon',
       { scale: 0, opacity: 0 },
       { scale: 1, opacity: 1, duration: 0.6, stagger: 0.1, ease: 'back.out(2)', delay: 1.2 }
     );
-
-    // ==========================================
-    // 4. THE 3D LOGO INFINITE ROTATION
-    // ==========================================
-    // Spin horizontally on the Y axis
-    gsap.to('.logo-3d', {
-      rotationY: 360,
-      duration: 12,
-      repeat: -1,
-      ease: 'none'
-    });
-    
-    // Subtle breathing float to make it feel volumetric
-    gsap.to('.logo-3d-wrapper', {
-      y: -30,
-      rotationX: 10,
-      duration: 4,
-      yoyo: true,
-      repeat: -1,
-      ease: 'sine.inOut'
-    });
 
   }, { scope: containerRef });
 
   return (
     <main ref={containerRef} className="relative w-full min-h-screen bg-black text-white overflow-hidden flex flex-col justify-between">
       
-      {/* ==========================================
-          THE 3D LOGO BACKGROUND
-      ========================================== */}
-      <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
-        {/* Glow effect behind the logo */}
-        <div className="absolute w-[50vw] h-[50vw] bg-primary rounded-full mix-blend-screen filter blur-[200px] opacity-[0.15]" />
-        
-        {/* The Logo Image 
-            mix-blend-screen completely removes the black background from your image!
-        */}
-        <div className="logo-3d-wrapper relative w-[80vw] md:w-[45vw] aspect-square flex items-center justify-center perspective-[1000px]">
-          <img 
-            src="/image_9eddc6.jpg" 
-            alt="3D OpenTech Logo" 
-            className="logo-3d w-full h-full object-contain mix-blend-screen opacity-90"
-            style={{ transformStyle: 'preserve-3d' }}
-          />
-        </div>
-      </div>
+      {/* Background Glow */}
+      <div className="absolute top-0 right-[20%] w-[50vw] h-[50vw] bg-primary rounded-full mix-blend-screen filter blur-[300px] opacity-[0.12] pointer-events-none" />
 
       {/* ==========================================
-          TOP & MIDDLE: FOREGROUND CONTENT
+          TOP: HERO TYPOGRAPHY
       ========================================== */}
-      <div className="relative z-10 w-full px-6 md:px-16 pt-32 md:pt-40 flex flex-col md:flex-row justify-between items-start h-full">
-        
-        {/* Left Side: Massive Typography */}
-        <div className="w-full md:w-1/2 flex flex-col perspective-[1000px]">
-          <div className="overflow-hidden mb-6">
-            <span className="reveal-text inline-block text-primary font-bold uppercase tracking-widest text-xs md:text-sm px-4 py-2 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md">
-              Contact Us
-            </span>
+      <div className="relative z-10 w-full px-6 md:px-16 pt-32 md:pt-40 flex flex-col items-center text-center perspective-[1000px]">
+        <div className="overflow-hidden mb-6">
+          <span className="reveal-text inline-block text-primary font-bold uppercase tracking-widest text-xs md:text-sm px-5 py-2.5 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-md shadow-[0_0_20px_rgba(245,178,26,0.15)]">
+            Start a Project
+          </span>
+        </div>
+        <h1 className="text-5xl md:text-7xl lg:text-[7vw] font-black uppercase tracking-tighter leading-[0.9]">
+          <div className="overflow-hidden"><span className="reveal-text inline-block">Let's Build</span></div>
+          <div className="overflow-hidden">
+            <span className="reveal-text inline-block text-white/40">Something</span>{' '}
+            <span className="reveal-text inline-block text-primary italic font-serif font-normal lowercase">Extraordinary.</span>
           </div>
-          <h1 className="text-5xl md:text-7xl lg:text-[6vw] font-black uppercase tracking-tighter leading-[0.9]">
-            <div className="overflow-hidden"><span className="reveal-text inline-block">Let's Build</span></div>
-            <div className="overflow-hidden"><span className="reveal-text inline-block text-white/50">Something</span></div>
-            <div className="overflow-hidden"><span className="reveal-text inline-block text-primary italic font-serif font-normal lowercase">That Matters.</span></div>
-          </h1>
-        </div>
+        </h1>
+      </div>
 
-        {/* Right Side: Sleek Contact List */}
-        <div className="w-full md:w-5/12 flex flex-col mt-16 md:mt-0 pb-32 md:pb-0">
-          <div className="w-full border-t border-white/20" />
+      {/* ==========================================
+          THE BENTO GRID (Map + Direct Contact)
+      ========================================== */}
+      <div className="relative z-20 w-full max-w-[1600px] mx-auto px-6 md:px-16 mt-16 md:mt-24">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[450px]">
           
-          {contactData.map((item, index) => (
-            <div 
-              key={index} 
-              className="info-row group relative flex flex-col md:flex-row md:items-end justify-between py-6 md:py-8 border-b border-white/20 transition-colors duration-500 hover:border-primary"
-            >
-              <span className="text-primary font-bold uppercase tracking-widest text-[10px] md:text-xs mb-2 md:mb-0 md:w-1/3">
-                {item.label}
-              </span>
-              
-              {item.link ? (
-                <a 
-                  href={item.link} 
-                  target={item.label === 'Website' ? "_blank" : "_self"} 
-                  rel="noreferrer"
-                  className="text-lg md:text-2xl font-light text-white group-hover:text-primary transition-colors duration-300 md:w-2/3 text-left md:text-right hover:underline underline-offset-4 decoration-primary/50"
-                >
-                  {item.value}
-                </a>
-              ) : (
-                <span className="text-lg md:text-xl font-light text-gray-300 md:w-2/3 text-left md:text-right leading-snug">
-                  {item.value}
-                </span>
-              )}
+          {/* 📍 THE MAP CARD (Spans 8 Columns) */}
+          <a
+            href="https://www.google.com/maps/place/Open+technology+digital+marketing+and+communication+agency+PLC/@9.0159057,38.8723161,202m/data=!3m1!1e3!4m6!3m5!1s0x164b9b5d3f2765b7:0xa5d3e6382cf54d66!8m2!3d9.0159895!4d38.8718237!16s%2Fg%2F11wwqn_mz4!5m1!1e4?authuser=0&entry=ttu&g_ep=EgoyMDI2MDkwNi4wIKXMDSoASAFQAw%3D%3D"
+            target="_blank"
+            rel="noreferrer"
+            className="bento-card md:col-span-8 relative rounded-[2rem] overflow-hidden border border-white/10 shadow-2xl bg-[#0a0a0a] group cursor-pointer aspect-square md:aspect-auto"
+          >
+            <img 
+              src="/map.png" 
+              alt="OTP Headquarters Location" 
+              className="absolute inset-0 w-full h-full object-cover filter grayscale contrast-125 brightness-75 opacity-70 group-hover:grayscale-0 group-hover:brightness-100 group-hover:opacity-100 transition-all duration-[800ms] ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent pointer-events-none transition-opacity duration-700 group-hover:opacity-60" />
+            
+            <div className="absolute bottom-8 left-8 pointer-events-none">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse shadow-[0_0_10px_rgba(245,178,26,0.8)]" />
+                <span className="text-primary font-bold tracking-widest uppercase text-xs">Global Headquarters</span>
+              </div>
+              <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-white drop-shadow-md">
+                Addis Ababa, Ethiopia
+              </h3>
+              <p className="text-gray-400 font-medium text-sm mt-1 max-w-sm">Abuka Building, 4th Floor, 404, Lemi Kura Sub City</p>
             </div>
-          ))}
+
+            <div className="absolute top-6 right-6 flex items-center gap-2 px-4 py-2 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-primary">Open in Maps</span>
+              <svg className="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+            </div>
+          </a>
+
+          {/* 📱 DIRECT CONTACT CARDS (Spans 4 Columns, Stacked) */}
+          <div className="md:col-span-4 flex flex-col gap-6">
+            
+            {/* Email Card */}
+            <a 
+              href="mailto:Opentechnologyplc@gmail.com"
+              className="bento-card flex-1 bg-[#111] border border-white/5 rounded-[2rem] p-8 flex flex-col justify-between group hover:bg-primary hover:text-black transition-colors duration-500 cursor-pointer overflow-hidden relative"
+            >
+              <div className="flex justify-between items-center relative z-10">
+                <span className="text-gray-500 group-hover:text-black/60 font-bold uppercase tracking-widest text-[10px] md:text-xs transition-colors">Direct Email</span>
+                <svg className="w-6 h-6 text-white group-hover:text-black -rotate-45 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+              <div className="relative z-10">
+                <h3 className="text-2xl lg:text-3xl font-black tracking-tighter leading-none text-white group-hover:text-black transition-colors">
+                  Opentechnologyplc<br/>@gmail.com
+                </h3>
+              </div>
+            </a>
+
+            {/* Phone Card */}
+            <a 
+              href="tel:+251989165874"
+              className="bento-card flex-1 bg-[#111] border border-white/5 rounded-[2rem] p-8 flex flex-col justify-between group hover:bg-white hover:text-black transition-colors duration-500 cursor-pointer overflow-hidden relative"
+            >
+              <div className="flex justify-between items-center relative z-10">
+                <span className="text-gray-500 group-hover:text-black/60 font-bold uppercase tracking-widest text-[10px] md:text-xs transition-colors">Direct Phone</span>
+                <svg className="w-6 h-6 text-white group-hover:text-black transform group-hover:rotate-12 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+              </div>
+              <div className="relative z-10">
+                <h3 className="text-2xl lg:text-3xl font-black tracking-tighter leading-none text-white group-hover:text-black transition-colors">
+                  +251 989 165 874 <br/> <span className="text-lg text-gray-500 group-hover:text-black/50">+251 940 091 308</span>
+                </h3>
+              </div>
+            </a>
+
+          </div>
         </div>
       </div>
+
+      {/* ==========================================
+          LOWER: LEAD GENERATION (INQUIRY FORM & BOOKING)
+      ========================================== */}
+      <section className="lead-section relative w-full max-w-[1600px] mx-auto px-6 md:px-16 py-24 md:py-32 z-20">
+        <div className="flex flex-col md:flex-row gap-6 md:gap-8 h-auto md:min-h-[400px]">
+          
+          {/* 📝 DIRECT INQUIRY FORM */}
+          <div className="lead-card flex-1 bg-[#111] rounded-[2rem] border border-white/5 p-8 md:p-10 flex flex-col justify-center relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full filter blur-[80px] group-hover:bg-primary/20 transition-colors duration-700 pointer-events-none" />
+            
+            <div className="relative z-10 w-full">
+              <span className="text-primary font-bold uppercase tracking-widest text-[10px] md:text-xs mb-3 block">Project Inquiry</span>
+              <h3 className="text-3xl md:text-4xl font-black uppercase tracking-tighter mb-3 text-white">
+                Start the <span className="text-primary italic font-serif font-normal lowercase">Conversation.</span>
+              </h3>
+              <p className="text-gray-400 font-medium text-xs md:text-sm mb-6 max-w-sm">
+                Tell us about your vision, timeline, and goals. Our strategy team will get back to you within 24 hours.
+              </p>
+              
+              <form onSubmit={handleFormSubmit} className="flex flex-col w-full gap-4">
+                {/* Top Row: Company & Email */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <input 
+                    type="text" 
+                    value={formData.company}
+                    onChange={(e) => setFormData({...formData, company: e.target.value})}
+                    disabled={formStatus === 'submitting'}
+                    placeholder="Company Name" 
+                    required
+                    className="flex-1 bg-white/5 border border-white/20 rounded-xl px-5 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-colors disabled:opacity-50"
+                  />
+                  <input 
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    disabled={formStatus === 'submitting'}
+                    placeholder="Email Address" 
+                    required
+                    className="flex-1 bg-white/5 border border-white/20 rounded-xl px-5 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-colors disabled:opacity-50"
+                  />
+                </div>
+                
+                {/* Bottom Row: Message */}
+                <textarea 
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  disabled={formStatus === 'submitting'}
+                  placeholder="Tell us about your project..." 
+                  required
+                  rows="3"
+                  className="w-full bg-white/5 border border-white/20 rounded-xl px-5 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-primary transition-colors resize-none disabled:opacity-50"
+                />
+                
+                {/* Submit Button & Success Indicator */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-1">
+                  <button 
+                    type="submit" 
+                    disabled={formStatus === 'submitting'}
+                    className="bg-primary text-black font-bold uppercase tracking-widest text-[10px] px-8 py-3.5 rounded-full hover:bg-white transition-all duration-300 shadow-[0_0_15px_rgba(245,178,26,0.2)] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    {formStatus === 'submitting' ? 'Sending...' : 'Send Message'}
+                  </button>
+                  
+                  {formStatus === 'success' && (
+                    <span className="text-green-400 font-bold uppercase tracking-widest text-[10px] animate-pulse">
+                      Message sent successfully!
+                    </span>
+                  )}
+                </div>
+              </form>
+            </div>
+          </div>
+
+          {/* 📅 MEETING BOOKING */}
+          <div className="lead-card flex-1 bg-primary rounded-[2rem] p-8 md:p-12 flex flex-col justify-center relative overflow-hidden group text-black">
+            <div className="relative z-10 flex flex-col h-full justify-center items-start">
+              <span className="text-black/60 font-bold uppercase tracking-widest text-[10px] md:text-xs mb-4 block">Ready to start?</span>
+              <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-4">
+                Book a <span className="italic font-serif font-normal lowercase text-white">Discovery Call.</span>
+              </h3>
+              <p className="text-black/80 font-bold text-sm mb-8 max-w-sm">
+                Speak directly with our strategy team. Choose a time that works for you, and let's map out your digital future.
+              </p>
+              
+              <a 
+                href="https://calendly.com/" 
+                target="_blank" 
+                rel="noreferrer"
+                className="bg-black text-white font-bold uppercase tracking-widest text-[10px] md:text-xs px-8 py-4 rounded-full flex items-center gap-3 hover:bg-white hover:text-black hover:scale-105 transition-all duration-300 shadow-xl"
+              >
+                Schedule Meeting
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </section>
 
       {/* ==========================================
           BOTTOM ROW: SOCIALS & BACK BUTTON

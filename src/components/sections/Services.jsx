@@ -27,7 +27,7 @@ const servicesData = [
   {
     id: '02',
     title: 'Web & Digital',
-    items: ['Custom Engineering', 'E-commerce Architectures', 'UI/UX Design', 'Performance Optimization', 'Technical Maintenance'],
+    items: ['Website Development', 'E-commerce Architectures', 'UI/UX Design', 'Performance Optimization', 'Technical Maintenance'],
     colorClass: 'bg-[#FFFFFF] text-[#111] border border-black/5',
     rotation: 'md:rotate-2',
     sticker: (
@@ -41,7 +41,7 @@ const servicesData = [
   {
     id: '03',
     title: 'Digital Marketing',
-    items: ['Social Media Mgmt', 'Paid Ads Campaigns', 'Content Strategy', 'Performance Tracking', 'Digital Brand Growth'],
+    items: ['SMM', 'Paid Ads Campaigns', 'Content Strategy', 'Video Production', 'Digital Brand Growth'],
     colorClass: 'bg-[#FFF4DD] text-[#111] border border-[#F5B21A]/20',
     rotation: 'md:-rotate-6',
     sticker: (
@@ -54,8 +54,8 @@ const servicesData = [
   },
   {
     id: '04',
-    title: 'Branding & Strategy',
-    items: ['Brand Positioning', 'Visual Identity Systems', 'Campaign Architecture', 'Unified Communication'],
+    title: 'Brand Identity & Design',
+    items: ['Brand Strategy & Positioning', 'Logo & Visual Identity', 'Brand Guidelines & Systems', 'Corporate & Marketing Collaterals', 'Company Profiles'],
     colorClass: 'bg-primary text-[#111] border border-black/10 shadow-[0_0_40px_rgba(245,178,26,0.3)]',
     rotation: 'md:rotate-4',
     sticker: (
@@ -70,7 +70,7 @@ const servicesData = [
   {
     id: '05',
     title: 'Cinematic Production',
-    items: ['Commercial Advertising', 'Corporate Profiles', 'Mini-documentaries', 'Music Videos', 'Color Grading & Audio'],
+    items: ['Commercial Advertising', 'Corporate Profiles', 'Documentary', 'Music Videos', 'Color Grading & Audio'],
     colorClass: 'bg-[#FCF9F0] text-[#111] border border-[#F5B21A]/10',
     rotation: 'md:-rotate-2',
     sticker: (
@@ -84,7 +84,7 @@ const servicesData = [
   {
     id: '06',
     title: 'VFX & 3D Animation',
-    items: ['Advanced Compositing', 'VFX Integration', '3D Modeling', 'CGI', 'Motion Graphics'],
+    items: ['Advanced Compositing', '3D Product Animation', 'VFX Advertising', 'Product Visualization', 'Motion Graphics', 'CGI Social Media Content'],
     colorClass: 'bg-[#FDFDFD] text-[#111] border border-black/5',
     rotation: 'md:rotate-3',
     sticker: (

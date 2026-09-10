@@ -15,6 +15,7 @@ const teamMembers = [
   { id: '02', name: 'Nathenael Nasir', role: 'General Manager / Production Designer', img: '/nathnael.png' },
   { id: '03', name: 'Kidus Yared', role: 'Production Director / VFX Supervisor', img: '/kidus.png' },
   { id: '04', name: 'Nahom Tesfaye', role: 'Marketing Director / Cinematographer', img: '/nahome.png' },
+  { id: '05', name: 'Nahom Nasir', role: 'Live Stream Expert', img: '/nasson.png' },
 ];
 
 const narrativeContent = [

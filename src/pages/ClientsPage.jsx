@@ -8,22 +8,24 @@ import { triggerLogoRain } from '../utils/logoRain';
 gsap.registerPlugin(ScrollTrigger);
 
 // ==========================================
-// 1. ALL 13 PARTNERS DATA
+// 1. ALL 15 PARTNERS DATA
 // ==========================================
 const clientList = [
-  { id: '01', name: 'Marvelous Real Estate', category: 'Real Estate', logo: '/marvelous.png', desc: 'Full-scale brand positioning and cinematic property showcases.' },
-  { id: '02', name: 'Castel Beer', category: 'F&B', logo: '/castel.png', desc: 'High-energy commercial advertising and digital marketing campaigns.' },
-  { id: '03', name: 'Horn Star Group', category: 'Corporate', logo: null, desc: 'Enterprise software integration and corporate identity overhaul.' },
-  { id: '04', name: 'Ziquala Real Estate', category: 'Real Estate', logo: '/ziquala.png', desc: '3D architectural rendering and digital lead generation.' },
-  { id: '05', name: 'Lucid Dental Clinic', category: 'Healthcare', logo: '/lucid.png', desc: 'Premium social media management and brand trust building.' },
-  { id: '06', name: '2Brothers Food Complex', category: 'F&B', logo: '/twobrothers.png', desc: 'E-commerce architecture and packaging design strategy.' },
-  { id: '07', name: 'Eltex Textile & Garment', category: 'Manufacturing', logo: '/eltex.png', desc: 'B2B digital transformation and corporate profile production.' },
-  { id: '08', name: 'Heal Venture', category: 'Health Tech', logo: '/heal.png', desc: 'Health-tech platform engineering and digital marketing.' },
-  { id: '09', name: 'Globelink Properties', category: 'Real Estate', logo: '/globelink.png', desc: 'International property marketing and UI/UX design.' },
-  { id: '10', name: 'Davis Home Solutions', category: 'Services', logo: '/davis.png', desc: 'Home service lead generation and paid ad funnels.' },
-  { id: '11', name: 'Jeblaton', category: 'Events', logo: '/jubilation.png', desc: 'Event branding, media coverage, and live streaming.' },
-  { id: '12', name: 'Kebena House', category: 'Hospitality', logo: '/kebena.png', desc: 'Boutique hospitality branding and visual identity.' },
-  { id: '13', name: 'Ywaza Liquor + Events', category: 'F&B', logo: '/waza.png', desc: 'Liquor branding, packaging, and event sponsorship media.' },
+  { id: '01', name: 'Marvelous Real Estate', category: 'Real Estate', logo: '/T6.png', desc: 'Full-scale brand positioning and cinematic property showcases.' },
+  { id: '02', name: 'Horn Star Group', category: 'Corporate', logo: '/T3.png', desc: 'Enterprise software integration and corporate identity overhaul.' },
+  { id: '03', name: 'Ziquala Real Estate', category: 'Real Estate', logo: '/T10.png', desc: '3D architectural rendering and digital lead generation.' },
+  { id: '04', name: 'Lucid Dental Clinic', category: 'Healthcare', logo: '/T11.png', desc: 'Premium social media management and brand trust building.' },
+  { id: '05', name: '2Brothers Food Complex', category: 'F&B', logo: '/T12.png', desc: 'E-commerce architecture and packaging design strategy.' },
+  { id: '06', name: 'Eltex Textile & Garment', category: 'Manufacturing', logo: '/T9.png', desc: 'B2B digital transformation and corporate profile production.' },
+  { id: '07', name: 'Heal Venture', category: 'Health Tech', logo: '/T15.png', desc: 'Health-tech platform engineering and digital marketing.' },
+  { id: '08', name: 'Globelink Properties', category: 'Real Estate', logo: '/T13.png', desc: 'International property marketing and UI/UX design.' },
+  { id: '09', name: 'Davis Home Solutions', category: 'Services', logo: '/T7.png', desc: 'Home service lead generation and paid ad funnels.' },
+  { id: '10', name: 'Jeblaton', category: 'Events', logo: '/T14.png', desc: 'Event branding, media coverage, and live streaming.' },
+  { id: '11', name: 'Kebena House', category: 'Hospitality', logo: '/T2.png', desc: 'Boutique hospitality branding and visual identity.' },
+  { id: '12', name: 'Ywaza Liquor + Events', category: 'F&B', logo: '/T5.png', desc: 'Liquor branding, packaging, and event sponsorship media.' },
+  { id: '13', name: 'WoW Chocolate', category: 'F&B', logo: '/T0.png', desc: 'Brand positioning and engaging digital marketing campaigns.' },
+  { id: '14', name: 'Broad View Trading PLC', category: 'Corporate', logo: '/T1.png', desc: 'Comprehensive corporate identity and B2B marketing strategy.' },
+  { id: '15', name: 'Crea/ers', category: 'Creative', logo: '/T8.png', desc: 'Innovative visual identity and multimedia production services.' },
 ];
 
 const testimonials = [
@@ -121,17 +123,20 @@ export default function ClientsPage() {
     });
 
     return () => mm.revert();
-  }, { scope: containerRef }); // 🎯 Empty dependency array means ScrollTriggers never break!
+  }, { scope: containerRef });
 
   // ==========================================
-  // 🧠 BRAIN 2: GLOBE SHUFFLE ENGINE (Runs safely every timer tick)
+  // 🧠 BRAIN 2: GLOBE SHUFFLE ENGINE (Dynamic for ANY length)
   // ==========================================
   useGSAP(() => {
     let diff = activeIndex - prevIndex.current;
-    if (diff === -12) diff = 1;  
-    if (diff === 12) diff = -1;  
+    const maxIndex = clientList.length - 1;
     
-    cumRot.current -= diff * (360 / 13);
+    // Dynamically check for the jump between the last item and the first item
+    if (diff === -maxIndex) diff = 1;  
+    if (diff === maxIndex) diff = -1;  
+    
+    cumRot.current -= diff * (360 / clientList.length);
     prevIndex.current = activeIndex;
 
     // Desktop: Rotate the Ring & Counter-Rotate the Logos inside it
@@ -141,7 +146,7 @@ export default function ClientsPage() {
     // Mobile: Rotate the 3D Cylinder
     gsap.to('.mobile-3d-cylinder', { rotationY: cumRot.current, duration: 1.5, ease: "expo.out", overwrite: "auto" });
 
-  }, { scope: containerRef, dependencies: [activeIndex] }); // 🎯 Only affects the globe!
+  }, { scope: containerRef, dependencies: [activeIndex] });
 
   // Smart Auto-Play Videos (Natively handles scroll)
   useEffect(() => {
@@ -221,7 +226,7 @@ export default function ClientsPage() {
                style={{ transformStyle: 'preserve-3d', transform: `translateZ(-140px)` }}
              >
                {clientList.map((client, i) => {
-                 const theta = 360 / 13;
+                 const theta = 360 / clientList.length; // Dynamically calculated
                  const isActive = activeIndex === i;
                  return (
                    <div 
@@ -258,7 +263,7 @@ export default function ClientsPage() {
 
             <div className="globe-ring absolute w-[90%] h-[90%] rounded-full border border-white/10 flex items-center justify-center">
               {clientList.map((client, i) => {
-                const theta = 360 / 13;
+                const theta = 360 / clientList.length; // Dynamically calculated
                 const angle = (i * theta) - 90; 
                 const radius = 32; 
                 const left = 50 + radius * Math.cos(angle * (Math.PI / 180));

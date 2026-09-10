@@ -8,6 +8,7 @@ import { triggerLogoRain } from './utils/logoRain';
 import CustomCursor from './components/ui/CustomCursor';
 import Navbar from './components/sections/Navbar';
 import Footer from './components/sections/Footer';
+import AIChatbot from './AIChatbot'; // 🤖 ADDED THE CHATBOT
 
 // Import Pages
 import Home from './pages/Home';
@@ -37,6 +38,9 @@ export default function App() {
         {/* Global Overlays */}
         <CustomCursor />
         <Navbar />
+        
+        {/* 🤖 THE FLOATING AI ASSISTANT */}
+        <AIChatbot />
 
         {/* Dynamic Page Content */}
         <div className="flex-grow">

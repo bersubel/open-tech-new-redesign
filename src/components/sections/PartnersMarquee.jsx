@@ -2,8 +2,8 @@ import { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { useNavigate } from 'react-router-dom'; // ⬅️ Added React Router
-import { triggerLogoRain } from '../../utils/logoRain'; // ⬅️ Added cinematic transition
+import { useNavigate } from 'react-router-dom'; 
+import { triggerLogoRain } from '../../utils/logoRain'; 
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,22 +11,23 @@ gsap.registerPlugin(ScrollTrigger);
 // 1. DATA SETUP
 // ==========================================
 const row1Logos = [
-  { type: 'image', src: '/marvelous.png', alt: 'Marvelous Real Estate' },
-  { type: 'image', src: '/eltex.png', alt: 'Eltex Textile & Garment Factory' },
-  { type: 'image', src: '/heal.png', alt: 'Heal Venture' },
-  { type: 'image', src: '/kebena.png', alt: 'Kebena House' },
-  { type: 'text', name: 'Horn Star Group' }, // The Golden Card
-  { type: 'image', src: '/waza.png', alt: 'Ywaza Liquor' }
+  { type: 'image', src: '/C6.png', alt: 'Marvelous Real Estate' },
+  { type: 'image', src: '/C8.png', alt: 'Eltex Textile & Garment Factory' },
+  { type: 'image', src: '/C2.png', alt: 'Heal Venture' },
+  { type: 'image', src: '/C4.png', alt: 'Kebena House' },
+  { type: 'image', src: '/C0.png', alt: 'WOW Chocolate' },
+  { type: 'image', src: '/C3.png', alt: 'HORN STAR' },
+  { type: 'image', src: '/C5.png', alt: 'Ywaza Liquor' }
 ];
 
 const row2Logos = [
-  { type: 'image', src: '/davis.png', alt: 'Davis Home Solutions' },
-  { type: 'image', src: '/globelink.png', alt: 'Globelink Properties' },
-  { type: 'image', src: '/jubilation.png', alt: 'Jeblaton' },
-  { type: 'image', src: '/lucid.png', alt: 'Lucid Dental Clinic' },
-  { type: 'image', src: '/twobrothers.png', alt: '2Brothers Food Complex' },
-  { type: 'image', src: '/castel.png', alt: 'Castel Beer' },
-  { type: 'image', src: '/ziquala.png', alt: 'Ziquala Real Estate' }
+  { type: 'image', src: '/C7.png', alt: 'Davis Home Solutions' },
+  { type: 'image', src: '/C12.png', alt: 'Globelink Properties' },
+  { type: 'image', src: '/C13.png', alt: 'Jeblaton' },
+  { type: 'image', src: '/C10.png', alt: 'Lucid Dental Clinic' },
+  { type: 'image', src: '/C11.png', alt: '2Brothers Food Complex' },
+  { type: 'image', src: '/C1.png', alt: 'Broad View Trading PLC' },
+  { type: 'image', src: '/C9.png', alt: 'Ziquala Real Estate' }
 ];
 
 // Duplicate EXACTLY once so moving by -50% creates a perfect, seamless infinite loop
@@ -40,7 +41,7 @@ const LogoItem = ({ item }) => {
   if (item.type === 'text') {
     // 🌟 THE GOLDEN CARD
     return (
-      <div className="h-16 md:h-20 lg:h-28 aspect-[3/1] bg-primary flex items-center justify-center rounded-xl shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] mx-4 filter grayscale opacity-50 hover:grayscale-0 hover:opacity-100 hover:scale-105 transition-all duration-300">
+      <div className="h-16 md:h-20 lg:h-28 aspect-[3/1] bg-primary flex items-center justify-center rounded-xl shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] mx-4 grayscale-0 opacity-100 md:grayscale md:opacity-50 md:hover:grayscale-0 md:hover:opacity-100 hover:scale-105 transition-all duration-300">
         <span className="text-black font-black uppercase tracking-tighter text-sm md:text-lg leading-none text-center px-4">
           {item.name}
         </span>
@@ -48,12 +49,12 @@ const LogoItem = ({ item }) => {
     );
   }
   
-  // 🖼️ STANDARD IMAGE LOGO
+  // 🖼️ STANDARD IMAGE LOGO (Updated for Mobile Color)
   return (
     <img 
       src={item.src} 
       alt={item.alt} 
-      className="h-16 md:h-20 lg:h-28 w-auto object-contain filter grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300 mix-blend-screen bg-transparent px-10 md:px-20"
+      className="h-16 md:h-20 lg:h-28 w-auto object-contain grayscale-0 opacity-100 md:grayscale md:opacity-50 md:hover:grayscale-0 md:hover:opacity-100 transition-all duration-300 mix-blend-screen bg-transparent px-10 md:px-20"
     />
   );
 };
@@ -67,56 +68,41 @@ export default function PartnersMarquee() {
   const marquee2Ref = useRef(null);
   const buttonRef = useRef(null);
   
-  const navigate = useNavigate(); // ⬅️ Initialize navigation
+  const navigate = useNavigate(); 
 
   useGSAP(() => {
     // --- MARQUEE ANIMATIONS (Infinite) ---
-    // Top Row: Scrolls Left
     gsap.to(marquee1Ref.current, {
-      x: "-50%", // Moves exactly half its total width
+      x: "-50%", 
       ease: "none",
-      duration: 35, 
+      duration: 25, 
       repeat: -1, 
     });
 
-    // Bottom Row: Scrolls Right
     gsap.fromTo(marquee2Ref.current, 
       { x: "-50%" },
       {
         x: "0%",
         ease: "none",
-        duration: 40, 
+        duration: 30, 
         repeat: -1,
       }
     );
 
-    // --- BUTTON & ARROW ENTRANCE (ScrollTriggered) ---
+    // --- BUTTON & ARROW ENTRANCE ---
     gsap.set('.inward-arrow-path', { strokeDasharray: 300, strokeDashoffset: 300 });
     gsap.set(buttonRef.current, { opacity: 0, scale: 0.8, y: 40 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: buttonRef.current,
-        start: "top 90%", // Trigger when the button area enters the viewport
+        start: "top 90%", 
         toggleActions: "play none none none"
       }
     });
 
-    // 1. Draw Arrows
-    tl.to('.inward-arrow-path', {
-      strokeDashoffset: 0,
-      duration: 1.2,
-      ease: "power2.out"
-    });
-
-    // 2. Pop Button
-    tl.to(buttonRef.current, {
-      opacity: 1,
-      scale: 1,
-      y: 0,
-      duration: 0.8,
-      ease: "back.out(1.8)"
-    }, "-=0.6");
+    tl.to('.inward-arrow-path', { strokeDashoffset: 0, duration: 1.2, ease: "power2.out" });
+    tl.to(buttonRef.current, { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: "back.out(1.8)" }, "-=0.6");
 
   }, { scope: sectionRef }); 
 
@@ -133,9 +119,8 @@ export default function PartnersMarquee() {
         </h2>
       </div>
 
-      {/* MARQUEE TRACK 1 (Moving Left) */}
+      {/* MARQUEE TRACK 1 */}
       <div className="relative w-full overflow-hidden flex items-center mb-12 md:mb-16">
-        {/* Left and Right Fade Masks */}
         <div className="absolute top-0 left-0 w-24 md:w-64 h-full bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
         <div className="absolute top-0 right-0 w-24 md:w-64 h-full bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
 
@@ -148,9 +133,8 @@ export default function PartnersMarquee() {
         </div>
       </div>
 
-      {/* MARQUEE TRACK 2 (Moving Right) */}
+      {/* MARQUEE TRACK 2 */}
       <div className="relative w-full overflow-hidden flex items-center">
-        {/* Left and Right Fade Masks */}
         <div className="absolute top-0 left-0 w-24 md:w-64 h-full bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
         <div className="absolute top-0 right-0 w-24 md:w-64 h-full bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
 
@@ -163,10 +147,10 @@ export default function PartnersMarquee() {
         </div>
       </div>
 
-      {/* 🚀 BOTTOM CTA: ARROWS & BUTTON */}
+      {/* BOTTOM CTA: ARROWS & BUTTON */}
       <div className="relative z-20 w-full max-w-5xl mt-20 md:mt-32 flex items-center justify-center gap-4 md:gap-8 pointer-events-none px-4">
         
-        {/* LEFT ARROW (Hidden on small mobile) */}
+        {/* LEFT ARROW */}
         <div className="hidden sm:block w-20 h-10 md:w-32 md:h-16">
           <svg viewBox="0 0 150 50" className="w-full h-full text-primary drop-shadow-[0_0_10px_rgba(245,178,26,0.4)]">
             <path className="inward-arrow-path" d="M 0,25 C 50,25 100,25 140,25" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
@@ -174,7 +158,7 @@ export default function PartnersMarquee() {
           </svg>
         </div>
 
-        {/* 🚀 ROUTED BUTTON: Triggers transition & navigates to /clients */}
+        {/* ROUTED BUTTON */}
         <a 
           ref={buttonRef}
           href="/clients" 
@@ -201,7 +185,7 @@ export default function PartnersMarquee() {
           </span>
         </a>
 
-        {/* RIGHT ARROW (Hidden on small mobile) */}
+        {/* RIGHT ARROW */}
         <div className="hidden sm:block w-20 h-10 md:w-32 md:h-16">
           <svg viewBox="0 0 150 50" className="w-full h-full text-primary drop-shadow-[0_0_10px_rgba(245,178,26,0.4)]">
             <path className="inward-arrow-path" d="M 150,25 C 100,25 50,25 10,25" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
