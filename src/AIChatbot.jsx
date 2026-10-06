@@ -14,7 +14,7 @@ const faqs = [
   },
   { 
     q: "Where are you located?", 
-    a: "Our headquarters are on the 4th Floor of Abuka Building, Lemi Kura Sub City, Addis Ababa.<br/><br/>📍 <a href='https://maps.app.goo.gl/qw71sxpfYBEKoAap6' target='_blank' rel='noopener noreferrer' class='text-[#F5B21A] hover:underline font-bold'>View on Google Maps</a>" 
+    a: "Our headquarters are on the 4th Floor of Abuki Building, Lemi Kura Sub City, Addis Ababa.<br/><br/>📍 <a href='https://maps.app.goo.gl/qw71sxpfYBEKoAap6' target='_blank' rel='noopener noreferrer' class='text-[#F5B21A] hover:underline font-bold'>View on Google Maps</a>" 
   },
   { 
     q: "Do you work internationally?", 
@@ -26,7 +26,7 @@ const faqs = [
   },
   { 
     q: "How long does a website take?", 
-    a: "A high-end, Awwwards-caliber website typically takes 4-8 weeks depending on the complexity and 3D elements required." 
+    a: "A high-end, Awwwards-caliber website typically takes 2-3 weeks depending on the complexity and 3D elements required." 
   },
   { 
     q: "Do you do social media?", 

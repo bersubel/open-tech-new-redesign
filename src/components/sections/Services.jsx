@@ -2,8 +2,8 @@ import { useState, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { useNavigate } from 'react-router-dom'; // ⬅️ Import router navigation
-import { triggerLogoRain } from '../../utils/logoRain'; // ⬅️ Import the master transition
+import { useNavigate } from 'react-router-dom';
+import { triggerLogoRain } from '../../utils/logoRain';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -45,11 +45,11 @@ const servicesData = [
     colorClass: 'bg-[#FFF4DD] text-[#111] border border-[#F5B21A]/20',
     rotation: 'md:-rotate-6',
     sticker: (
-      <svg viewBox="0 0 100 100" className="w-20 h-20 md:w-24 md:h-24 drop-shadow-md">
-         <path d="M50 5 C80 5 95 30 90 60 C85 90 50 95 20 80 C-10 65 0 25 25 10 C35 4 40 5 50 5Z" fill="#111" stroke="#F5B21A" strokeWidth="3" />
-         <rect x="35" y="25" width="30" height="50" rx="5" fill="none" stroke="#F5B21A" strokeWidth="4" />
-         <circle cx="50" cy="65" r="3" fill="#F5B21A" />
-      </svg>
+      <img 
+        src="/digital.png" 
+        alt="Digital Marketing" 
+        className="w-20 h-20 md:w-24 md:h-24 drop-shadow-md object-contain" 
+      />
     )
   },
   {
@@ -59,12 +59,11 @@ const servicesData = [
     colorClass: 'bg-primary text-[#111] border border-black/10 shadow-[0_0_40px_rgba(245,178,26,0.3)]',
     rotation: 'md:rotate-4',
     sticker: (
-      <svg viewBox="0 0 100 100" className="w-16 h-16 md:w-20 md:h-20 drop-shadow-md">
-         <path d="M50 10 C70 15 90 35 85 60 C80 85 55 95 35 85 C15 75 5 50 15 30 C25 10 38 7 50 10Z" fill="#111" stroke="#FFF" strokeWidth="3" />
-         <ellipse cx="50" cy="35" rx="20" ry="8" fill="none" stroke="#FFF" strokeWidth="4"/>
-         <path d="M30 35 V65 A20 8 0 0 0 70 65 V35" fill="none" stroke="#FFF" strokeWidth="4"/>
-         <path d="M30 50 A20 8 0 0 0 70 50" fill="none" stroke="#FFF" strokeWidth="4"/>
-      </svg>
+      <img 
+        src="/brand.png" 
+        alt="Brand Identity" 
+        className="w-16 h-16 md:w-20 md:h-20 drop-shadow-md object-contain" 
+      />
     )
   },
   {
@@ -74,11 +73,11 @@ const servicesData = [
     colorClass: 'bg-[#FCF9F0] text-[#111] border border-[#F5B21A]/10',
     rotation: 'md:-rotate-2',
     sticker: (
-      <svg viewBox="0 0 100 100" className="w-16 h-16 md:w-20 md:h-20 drop-shadow-md">
-         <path d="M50 5 C80 5 95 30 90 60 C85 90 50 95 20 80 C-10 65 0 25 25 10 C35 4 40 5 50 5Z" fill="#111" stroke="#F5B21A" strokeWidth="3" />
-         <path d="M25 70 L25 45 M45 70 L45 35 M65 70 L65 55 M85 70 L85 25" stroke="#F5B21A" strokeWidth="6" strokeLinecap="round" />
-         <path d="M15 70 L95 70" stroke="#F5B21A" strokeWidth="4" strokeLinecap="round"/>
-      </svg>
+      <img 
+        src="/cinematic.png" 
+        alt="Cinematic Production" 
+        className="w-16 h-16 md:w-20 md:h-20 drop-shadow-md object-contain" 
+      />
     )
   },
   {
@@ -88,13 +87,11 @@ const servicesData = [
     colorClass: 'bg-[#FDFDFD] text-[#111] border border-black/5',
     rotation: 'md:rotate-3',
     sticker: (
-      <svg viewBox="0 0 100 100" className="w-16 h-16 md:w-20 md:h-20 drop-shadow-md">
-         <path d="M50 10 C70 15 90 35 85 60 C80 85 55 95 35 85 C15 75 5 50 15 30 C25 10 38 7 50 10Z" fill="#F5B21A" stroke="#111" strokeWidth="3" />
-         <circle cx="35" cy="35" r="6" fill="#111" />
-         <circle cx="65" cy="45" r="6" fill="#111" />
-         <circle cx="45" cy="70" r="6" fill="#111" />
-         <path d="M35 35 L65 45 L45 70 Z" fill="none" stroke="#111" strokeWidth="4" strokeLinejoin="round" />
-      </svg>
+      <img 
+        src="/vfx.png" 
+        alt="VFX & 3D Animation" 
+        className="w-16 h-16 md:w-20 md:h-20 drop-shadow-md object-contain" 
+      />
     )
   }
 ];
@@ -105,7 +102,7 @@ export default function Services() {
   const headerRef = useRef(null);
   const buttonRef = useRef(null); 
   
-  const navigate = useNavigate(); // ⬅️ Initialize navigation
+  const navigate = useNavigate();
 
   useGSAP(() => {
     let mm = gsap.matchMedia();
@@ -114,7 +111,6 @@ export default function Services() {
     // 🖥️ DESKTOP: CINEMATIC DEALING SHUFFLE
     // ==========================================
     mm.add("(min-width: 768px)", () => {
-      // Hide header and button initially (pushed down)
       gsap.set([headerRef.current, buttonRef.current], { y: 80, opacity: 0 });
 
       const tl = gsap.timeline({
@@ -128,11 +124,9 @@ export default function Services() {
         }
       });
 
-      // STEP 1: Header Appears First
       tl.to(headerRef.current, { y: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, 0);
-      tl.to({}, { duration: 0.5 }); // Scroll pause
+      tl.to({}, { duration: 0.5 }); 
 
-      // STEP 2: The Spinning Dealer's Shuffle
       tl.from('.service-card', {
         y: window.innerHeight + 200, 
         rotation: 360,               
@@ -143,7 +137,6 @@ export default function Services() {
         ease: "back.out(1.2)"        
       });
 
-      // STEP 3: The Big Button Bounces Up
       tl.to(buttonRef.current, { 
         y: 0, 
         opacity: 1, 
@@ -159,7 +152,6 @@ export default function Services() {
       const cards = gsap.utils.toArray('.service-card');
       const stackRotations = [-4, 5, -2, 4, -5, 3]; 
 
-      // Push button down for entrance
       gsap.set(buttonRef.current, { y: 50, opacity: 0 });
 
       const tl = gsap.timeline({
@@ -185,7 +177,6 @@ export default function Services() {
         }, "+=1.5"); 
       });
 
-      // Reveal button gracefully at the very end of the stack
       tl.to(buttonRef.current, {
         y: 0,
         opacity: 1,
@@ -203,14 +194,12 @@ export default function Services() {
       ref={sectionRef} 
       className="relative w-full h-screen bg-black flex flex-col items-center justify-start md:justify-center overflow-hidden cursor-default pt-24 md:pt-0"
     >
-      {/* HEADER */}
       <div ref={headerRef} className="relative z-0 max-w-7xl mx-auto w-full text-center px-6">
         <h2 className="text-4xl md:text-[5vw] font-black text-white tracking-tighter leading-none mb-6 md:mb-8">
           partner with us <span className="italic font-serif font-normal text-primary">for:</span>
         </h2>
       </div>
 
-      {/* CARD CONTAINER */}
       <div 
         className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-16 lg:px-24 flex flex-col md:flex-row items-center justify-center mt-2 md:mt-6 h-[55vh] md:h-auto"
       >
@@ -233,7 +222,6 @@ export default function Services() {
               key={service.id}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
-              // 🎯 FIXED DESKTOP DIMENSIONS: Height reduced to md:h-[400px] lg:h-[440px] so it breathes perfectly
               className={`service-card absolute md:relative top-0 left-0 right-0 mx-auto md:mx-0 md:-ml-16 lg:-ml-20 first:ml-0 w-[88%] sm:w-[350px] md:w-[260px] lg:w-[280px] h-[50vh] md:h-[400px] lg:h-[440px] flex-shrink-0 cursor-pointer ${isHovered ? 'z-50' : 'z-10'}`}
             >
               <div className={`${cardBaseClasses} ${service.colorClass} ${cardActiveClasses}`}>
@@ -264,7 +252,6 @@ export default function Services() {
         })}
       </div>
 
-      {/* 🚀 THE BIG, INSTRUCTIVE BOTTOM BUTTON - NOW WITH TRANSITION */}
       <div 
         ref={buttonRef} 
         className="absolute bottom-6 md:bottom-12 left-0 w-full flex justify-center px-4 z-40 pointer-events-auto"
@@ -273,7 +260,6 @@ export default function Services() {
           href="/services"
           onClick={(e) => {
             e.preventDefault();
-            // Trigger the cinematic transition, then navigate to the new page
             triggerLogoRain(() => {
               navigate('/services');
               window.scrollTo(0, 0);

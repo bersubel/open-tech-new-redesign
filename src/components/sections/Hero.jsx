@@ -1,5 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { useGSAP } from '@gsap/react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
   const [isMuted, setIsMuted] = useState(true);
@@ -9,6 +14,49 @@ export default function Hero() {
   
   const videoRef = useRef(null);
   const sectionRef = useRef(null);
+  const videoWrapperRef = useRef(null);
+  
+  const textLoadRef = useRef(null);
+  const textScrollRef = useRef(null);
+
+  useGSAP(() => {
+    let mm = gsap.matchMedia();
+
+    // 1. INITIAL ENTRY ANIMATION
+    gsap.fromTo(textLoadRef.current, 
+      { y: 60, opacity: 0 }, 
+      { y: 0, opacity: 1, duration: 1.5, ease: "power3.out", delay: 0.2 }
+    );
+
+    // 2. SCROLL ANIMATION (Smooth Parallax, No Pinning)
+    mm.add("(min-width: 768px)", () => {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top top",
+          end: "bottom top", // Animation plays exactly as the section scrolls out of view
+          pin: false, // 💡 UNPINNED: The section will naturally scroll up immediately
+          scrub: 1, // Smooth, fluid tracking
+        }
+      });
+
+      // Video gets pushed down slightly (parallax) and fades as you scroll up
+      tl.to(videoWrapperRef.current, { 
+        y: 150, 
+        scale: 0.95, 
+        opacity: 0, 
+        ease: "none" 
+      }, 0)
+      // Text floats up faster than the scroll for a lightweight feel
+      .to(textScrollRef.current, { 
+        y: -150, 
+        opacity: 0, 
+        ease: "none" 
+      }, 0); 
+    });
+
+    return () => mm.revert();
+  }, { scope: sectionRef });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -50,10 +98,12 @@ export default function Hero() {
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       onClick={toggleAudio}
-      className="relative w-full h-screen overflow-hidden bg-black cursor-pointer"
+      // 💡 ADDED: rounded-b-[3rem] md:rounded-b-[5rem] for the smooth curved bottom edge
+      // 💡 ADDED: shadow-2xl to give it a slight pop over the section underneath it
+      className="relative w-full h-screen overflow-hidden bg-black cursor-pointer rounded-b-[3rem] md:rounded-b-[5rem] shadow-2xl z-20"
     >
       {/* 1. BACKGROUND VIDEO */}
-      <div className="absolute inset-0 w-full h-full z-0">
+      <div ref={videoWrapperRef} className="absolute inset-0 w-full h-full z-0 origin-top">
         <video 
           ref={videoRef}
           autoPlay 
@@ -66,26 +116,27 @@ export default function Hero() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.6)_100%)] pointer-events-none" />
       </div>
 
-      {/* 2. LOWERED TYPOGRAPHY (UPDATED TO BLUEPRINT MESSAGING) */}
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-13 md:justify-center md:pb-0 md:pt-[50vh] pointer-events-none px-4">
-        <div className="max-w-5xl mx-auto text-center">
-          <h1 className="text-white text-5xl md:text-[7vw] leading-[1.1] md:leading-[1.05] font-black tracking-tighter">
-            Empowering <span className="font-serif italic font-normal px-2">brands</span> <br />
-            through <span className="relative inline-block text-primary">
-              open solutions
-              {/* The hand-drawn underline now wraps "open solutions" */}
-              <svg className="absolute w-[110%] h-auto -left-[5%] -bottom-2 md:-bottom-4 text-white" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2 15C50 4 150 -5 298 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
-              </svg>
-            </span>
-          </h1>
+      {/* 2. TYPOGRAPHY */}
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-end pb-13 md:justify-center md:pb-0 md:pt-[50vh] pointer-events-none px-4">
+        <div ref={textScrollRef} className="max-w-5xl mx-auto text-center">
+          <div ref={textLoadRef} className="opacity-0">
+            <h1 className="text-white text-5xl md:text-[7vw] leading-[1.1] md:leading-[1.05] font-black tracking-tighter">
+              Empowering <span className="font-serif italic font-normal px-2">brands</span> <br />
+              through <span className="relative inline-block text-primary">
+                open solutions
+                <svg className="absolute w-[110%] h-auto -left-[5%] -bottom-2 md:-bottom-4 text-white" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M2 15C50 4 150 -5 298 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                </svg>
+              </span>
+            </h1>
+          </div>
         </div>
       </div>
 
-      {/* 3. MOBILE FIXED UNMUTE BUTTON (Hidden on Desktop) */}
+      {/* 3. MOBILE FIXED UNMUTE BUTTON */}
       <button 
         onClick={(e) => {
-          e.stopPropagation(); // Prevents triggering the section background click twice
+          e.stopPropagation();
           toggleAudio();
         }}
         className="absolute z-50 bottom-36 left-4 w-16 h-16 flex items-center justify-center md:hidden active:scale-95 transition-transform"
@@ -108,7 +159,7 @@ export default function Hero() {
         </div>
       </button>
 
-      {/* 4. DESKTOP FLOATING UNMUTE STICKER (Hidden on Mobile) */}
+      {/* 4. DESKTOP FLOATING UNMUTE STICKER */}
       <AnimatePresence>
         {isHovering && window.innerWidth >= 768 && (
           <motion.div
@@ -120,7 +171,7 @@ export default function Hero() {
               x: mousePos.x + 20, 
               y: mousePos.y + 20
             }}
-            exit={{ scale: 0, opacity: 0 }}
+            exit={{ scale: 0, opacity: 0}}
             transition={{ 
               type: "spring", 
               stiffness: 400, 

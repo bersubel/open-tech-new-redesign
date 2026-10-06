@@ -436,7 +436,7 @@ export default function ClientsPage() {
       ========================================== */}
       <div className="w-full flex flex-col items-center justify-center py-20 px-4 z-20 relative border-t border-white/5">
         <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white tracking-tighter uppercase mb-8 md:mb-10 text-center">
-          Ready to join the <span className="text-primary italic font-serif font-normal lowercase">roster?</span>
+          Ready to Build Your<span className="text-primary italic font-serif font-normal lowercase">  Brand?</span>
         </h2>
         
         <a 

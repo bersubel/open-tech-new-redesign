@@ -11,12 +11,11 @@ gsap.registerPlugin(ScrollTrigger);
 // 1. DATA SETUP
 // ==========================================
 const teamMembers = [
-  { id: '01', name: 'Yonas Kebede', role: 'Creative Director / AI Director', img: '/yonas.png' },
-  { id: '02', name: 'Nathenael Nasir', role: 'General Manager / Production Designer', img: '/nathnael.png' },
-  { id: '03', name: 'Kidus Yared', role: 'Production Director / VFX Supervisor', img: '/kidus.png' },
-  { id: '04', name: 'Nahom Tesfaye', role: 'Marketing Director / Cinematographer', img: '/nahome.png' },
-  { id: '05', name: 'Nahom Nasir', role: 'Live Stream Expert', img: '/nasson.png' },
-];
+  { id: '01', name: 'Yonas Kebede', role: 'CEO / Creative Director / AI Director', img: '/yonas.png' },
+  { id: '02', name: 'Nathenael Nasir', role: 'CEO / General Manager / Production Designer', img: '/nathnael.png' },
+  { id: '03', name: 'Kidus Yared', role: 'CEO / Production Director / VFX Supervisor', img: '/kidus.png' },
+  { id: '04', name: 'Nahom Tesfaye', role: 'CEO / Marketing Director / Cinematographer', img: '/nahome.png' },
+ ];
 
 const narrativeContent = [
   {
@@ -88,7 +87,6 @@ export default function AboutPage() {
     // 3. STICKY NARRATIVE & TEXT SCRUB
     // ==========================================
     mm.add("(min-width: 768px)", () => {
-      // Pin the left side title on desktop
       ScrollTrigger.create({
         trigger: narrativePinRef.current,
         start: "top 15%",
@@ -98,7 +96,6 @@ export default function AboutPage() {
       });
     });
 
-    // Fade and slide the narrative blocks as you scroll
     gsap.utils.toArray('.narrative-block').forEach((block) => {
       gsap.fromTo(block, 
         { opacity: 0, y: 100 },
@@ -196,15 +193,16 @@ export default function AboutPage() {
         </div>
 
         {/* Right: Scrolling Text Blocks */}
-        <div className="w-full md:w-2/3 flex flex-col md:pt-40 md:pb-[40vh] gap-24 md:gap-40">
+        <div className="w-full md:w-2/3 flex flex-col md:pt-40 md:pb-[40vh] gap-20 md:gap-32">
           {narrativeContent.map((block, i) => (
             <div key={i} className="narrative-block flex flex-col">
               <span className="text-primary text-[10px] md:text-xs font-bold uppercase tracking-widest mb-6 flex items-center gap-4">
                 <span className="w-8 h-px bg-primary/50" /> {block.tag}
               </span>
-              <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight leading-snug md:leading-tight text-white/90">
+              {/* 💡 REFINED TYPOGRAPHY: Elegant size (text-xl md:text-2xl lg:text-3xl), softer weight (font-normal to font-medium), relaxed leading (leading-relaxed to leading-loose), and a softer color (text-gray-300). */}
+              <p className="text-xl md:text-2xl lg:text-3xl font-normal md:font-medium tracking-wide leading-relaxed lg:leading-[1.7] text-gray-300 max-w-4xl">
                 {block.text}
-              </h3>
+              </p>
             </div>
           ))}
         </div>
@@ -223,10 +221,6 @@ export default function AboutPage() {
           </p>
         </div>
 
-        {/* The Accordion Engine:
-            Uses flex-col on mobile and flex-row on desktop.
-            flex-grow handles the smooth expansion. 
-        */}
         <div className="team-accordion-container w-full max-w-[1500px] mx-auto h-[80vh] md:h-[70vh] flex flex-col md:flex-row gap-2 md:gap-4 rounded-[2rem] overflow-hidden">
           {teamMembers.map((member, index) => {
             const isActive = activeTeamIndex === index;

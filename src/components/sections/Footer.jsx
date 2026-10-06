@@ -153,8 +153,8 @@ export default function Footer() {
               <a href="tel:+251940091308" className="text-white font-medium text-sm hover:text-primary transition-colors">
                 +251 940 091 308
               </a>
-              <a href="mailto:Opentechnologyplc@gmail.com" className="text-white font-medium text-sm hover:text-primary transition-colors w-max break-all mt-2">
-                Opentechnologyplc@gmail.com
+              <a href="mailto:opentechnologyplc@gmail.com" className="text-white font-medium text-sm hover:text-primary transition-colors w-max break-all mt-2">
+                opentechnologyplc@gmail.com
               </a>
             </div>
           </div>
