@@ -11,10 +11,10 @@ gsap.registerPlugin(ScrollTrigger);
 // 1. DATA SETUP
 // ==========================================
 const teamMembers = [
-  { id: '01', name: 'Yonas Kebede', role: 'CEO / Creative Director / AI Director', img: '/yonas.png' },
-  { id: '02', name: 'Nathenael Nasir', role: 'CEO / General Manager / Production Designer', img: '/nathnael.png' },
-  { id: '03', name: 'Kidus Yared', role: 'CEO / Production Director / VFX Supervisor', img: '/kidus.png' },
-  { id: '04', name: 'Nahom Tesfaye', role: 'CEO / Marketing Director / Cinematographer', img: '/nahome.png' },
+  { id: '01', name: 'Yonas Kebede', role: 'CO Founder  / Creative Director / AI Director', img: '/yonas.png' },
+  { id: '02', name: 'Nathnael N. Al Asser', role: 'CO Founder  / General Manager / Brand Specialist', img: '/nathnael.png' },
+  { id: '03', name: 'Kidus Yared', role: 'CO Founder  / Production Director / VFX Supervisor', img: '/kidus.png' },
+  { id: '04', name: 'Nahom Tesfaye', role: 'CO Founder  / Marketing Director / Cinematographer', img: '/nahome.png' },
  ];
 
 const narrativeContent = [

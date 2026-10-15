@@ -16,7 +16,7 @@ const longVideos = [
   { id: 'L4', ytId: '66OVzWQSZn8', title: 'Corporate Profile', client: '2Brothers Food Complex' },
   { id: 'L5', ytId: 'yC2a9CG5skI', title: 'Product Launch', client: 'Marvelous Real Estate' },
   { id: 'L6', ytId: 'Sy4h7GiBeiE', title: 'Real Estate Tour', client: 'Marvelous Real Estate' },
-  { id: 'L7', ytId: 'VfRsy9xE0vU', title: 'Fashion Film', client: '2Brothers Food Complex' },
+  { id: 'L7', ytId: 'VfRsy9xE0vU', title: 'Corporate Ads', client: '2Brothers Food Complex' },
 ];
 
 const shortVideos = [
@@ -38,17 +38,24 @@ const shortsTop = shortVideos.slice(0, 12);
 const shortsBottom = shortVideos.slice(12, 23);
 const landscapeHeroShort = { id: 'M1', ytId: 'riLsU9sI4mc', title: 'The Intermission', client: 'Special Feature' };
 
+// 💡 UPDATED: Removed WoW Chocolate & Eltex, Added Echollusion
 const brandIdentityWorks = [
   { id: 'B1', client: 'Marvelous Real Estate', desc: 'Complete visual identity overhaul and brand strategy.', img: '/brand1.png', color: '#00A896' },
   { id: 'B2', client: 'Horn Star Group', desc: 'Boutique hospitality branding and packaging design.', img: '/brand2.png', color: '#D4AF37' },
-  { id: 'B3', client: 'WoW Chocolate', desc: 'FMCG packaging, typography, and market positioning.', img: '/brand3.png', color: '#E07A5F' },
-  { id: 'B4', client: 'Eltex Textile', desc: 'Corporate rebrand and industrial visual guidelines.', img: '/brand4.png', color: '#3D5A80' },
+  { id: 'B3', client: 'Echollusion', desc: 'Immersive brand positioning and digital visual identity.', img: '/brand3.png', color: '#E07A5F' },
+];
+
+// 💡 NEW: Photoshoot and Graphics Array
+const photoshootWorks = [
+  { id: 'P1', client: 'Eltex Textile', desc: 'Industrial and Corporate Photoshoot', img: '/G1.png', color: '#3D5A80' },
+  { id: 'P2', client: 'Graphics Works', desc: 'Creative Digital Graphics and Layouts', img: '/G2.png', color: '#9D4EDD' },
+  { id: 'P3', client: 'Babogaya Resort', desc: 'Hospitality and Lifestyle Photoshoot', img: '/G3.png', color: '#D4AF37' },
 ];
 
 const websiteWorks = [
-  { id: 'W1', client: 'Marvelous Real Estate', type: 'Luxury Property Portal', img: '/T6.png' },
-  { id: 'W2', client: 'Lucid Dental Clinic', type: 'Healthcare Digital Experience', img: '/T11.png' },
-  { id: 'W3', client: '2Brothers Food Complex', type: 'E-Commerce Architecture', img: '/T12.png' },
+  { id: 'W1', client: 'Marvelous Real Estate', type: 'Luxury Property Portal', img: '/T6.png', url: 'https://www.marvelousrealestates.com/' },
+  { id: 'W2', client: 'Eltex textile and garment', type: 'textile and garment Digital Experience', img: '/T9.png', url: 'https://www.eltexgarment.com/' },
+  { id: 'W3', client: 'Davis home solution', type: 'E-Commerce Architecture', img: '/T7.png', url: 'https://www.davishomesolutionet.com/' },
 ];
 
 const SectionTitle = ({ subtitle, mainTitle, highlight }) => (
@@ -190,6 +197,14 @@ export default function WorkPage() {
           scrollTrigger: { trigger: card, start: "top 85%" }
         });
       });
+      
+      // 💡 NEW: Mobile Photoshoot Reveal
+      gsap.utils.toArray('.mobile-photoshoot-card').forEach((card) => {
+        gsap.from(card, {
+          y: 80, opacity: 0, scale: 0.95, duration: 0.6,
+          scrollTrigger: { trigger: card, start: "top 85%" }
+        });
+      });
     });
 
     // 🌟 3. UNIVERSAL ANIMATIONS (Runs on Mobile & Desktop)
@@ -221,11 +236,17 @@ export default function WorkPage() {
     });
 
     // Website Card CSS Stacking 
-    gsap.utils.toArray('.website-stack-card').forEach((card, i, arr) => {
-      if (i !== arr.length - 1) { 
+    const webCards = gsap.utils.toArray('.website-stack-card');
+    webCards.forEach((card, i) => {
+      if (i !== webCards.length - 1) { 
         gsap.to(card, {
           scale: 0.9, opacity: 0.5, filter: 'blur(8px)', ease: "none",
-          scrollTrigger: { trigger: card, start: "top 12%", end: "bottom top", scrub: true }
+          scrollTrigger: { 
+            trigger: webCards[i + 1], 
+            start: "top 85%",
+            end: "top 15%", 
+            scrub: true 
+          }
         });
       }
     });
@@ -313,7 +334,6 @@ export default function WorkPage() {
         {longVideos.map((video, index) => (
           <div 
             key={`mobile-${video.id}`} 
-            // 💡 FULL SCREEN WRAPPER: This ensures exactly ONE video is visible at a time. The next video hides off-screen until you scroll a full 100vh down.
             className="mobile-long-wrapper sticky top-0 w-full h-[100vh] flex flex-col items-center justify-center px-4 isolate transform-gpu"
           >
             <div className="yt-wrapper mobile-long-card relative w-full aspect-video rounded-[2.5rem] overflow-hidden bg-[#111] shadow-[0_30px_60px_rgba(0,0,0,0.5)] border border-white/5 isolate transform-gpu">
@@ -355,7 +375,8 @@ export default function WorkPage() {
                 className={`yt-wrapper yt-short-video parallax-short relative w-full aspect-[9/16] rounded-2xl overflow-hidden bg-[#111] shadow-xl cursor-pointer isolate transform-gpu ${mobileMargin} ${desktopMargin}`}
               >
                 <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none rounded-2xl isolate transform-gpu">
-                  <iframe src={getYTUrl(video.ytId)} loading="lazy" className="absolute top-1/2 left-1/2 w-full h-full scale-[1.15] -translate-x-1/2 -translate-y-1/2" frameBorder="0" allow="autoplay; encrypted-media" />
+                  {/* 💡 YOUR CSS HACK TRANSLATED: w-[300%] and -ml-[100%] */}
+                  <iframe src={getYTUrl(video.ytId)} loading="lazy" className="absolute top-0 w-[300%] h-[110%] -ml-[100%] -mt-[5%] pointer-events-none" frameBorder="0" allow="autoplay; encrypted-media" />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
                 <MuteButton isMuted={mutedStates[video.id]} onClick={(e) => toggleMute(e, video.id)} />
@@ -371,7 +392,8 @@ export default function WorkPage() {
           className="yt-wrapper yt-short-video relative w-full max-w-6xl mx-auto aspect-video rounded-[2rem] md:rounded-3xl overflow-hidden bg-[#111] shadow-2xl mb-16 md:mb-32 isolate transform-gpu"
         >
           <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none rounded-[2rem] md:rounded-3xl isolate transform-gpu">
-            <iframe src={getYTUrl(landscapeHeroShort.ytId)} loading="lazy" className="absolute top-1/2 left-1/2 w-full h-full scale-[1.18] -translate-x-1/2 -translate-y-1/2" frameBorder="0" allow="autoplay; encrypted-media" />
+            {/* The Landscape video uses a slight height crop to hide the top/bottom UI */}
+            <iframe src={getYTUrl(landscapeHeroShort.ytId)} loading="lazy" className="absolute top-0 left-1/2 w-full h-[120%] -translate-x-1/2 -mt-[10%] pointer-events-none" frameBorder="0" allow="autoplay; encrypted-media" />
           </div>
           <div className="absolute inset-0 bg-gradient-to-b from-[#111]/80 via-transparent to-transparent pointer-events-none opacity-40" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
@@ -398,7 +420,8 @@ export default function WorkPage() {
                 className={`yt-wrapper yt-short-video parallax-short relative w-full aspect-[9/16] rounded-2xl overflow-hidden bg-[#111] shadow-xl cursor-pointer isolate transform-gpu ${mobileMargin} ${desktopMargin}`}
               >
                 <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none rounded-2xl isolate transform-gpu">
-                  <iframe src={getYTUrl(video.ytId)} loading="lazy" className="absolute top-1/2 left-1/2 w-full h-full scale-[1.15] -translate-x-1/2 -translate-y-1/2" frameBorder="0" allow="autoplay; encrypted-media" />
+                  {/* 💡 YOUR CSS HACK TRANSLATED: w-[300%] and -ml-[100%] */}
+                  <iframe src={getYTUrl(video.ytId)} loading="lazy" className="absolute top-0 w-[300%] h-[110%] -ml-[100%] -mt-[5%] pointer-events-none" frameBorder="0" allow="autoplay; encrypted-media" />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30 pointer-events-none" />
                 <MuteButton isMuted={mutedStates[video.id]} onClick={(e) => toggleMute(e, video.id)} />
@@ -407,7 +430,6 @@ export default function WorkPage() {
           })}
         </div>
       </section>
-
       {/* ==========================================
           SECTION 3: BRAND IDENTITY
       ========================================== */}
@@ -456,26 +478,84 @@ export default function WorkPage() {
       </section>
 
       {/* ==========================================
-          SECTION 4: WEBSITES
+          SECTION 3.5: PHOTOSHOOT & GRAPHICS
+      ========================================== */}
+      <div className="mt-12 md:mt-24">
+        <SectionTitle subtitle="Visual Storytelling" mainTitle="Photoshoot" highlight="& Graphics." />
+      </div>
+
+      <section className="relative w-full max-w-[1600px] mx-auto px-4 md:px-12 pb-20 z-20">
+        <p className="hidden md:block text-primary text-xs uppercase tracking-widest font-bold animate-pulse text-right mb-4">Hover to expand ⟶</p>
+
+        {/* 🖥️ DESKTOP: Smooth Flex-Expand Animation */}
+        <div className="hidden md:flex w-full h-[70vh] gap-6">
+          {photoshootWorks.map((work, index) => (
+            <div key={work.id} className="group relative flex-1 hover:flex-[3] transition-all duration-[800ms] ease-[cubic-bezier(0.76,0,0.24,1)] rounded-3xl overflow-hidden bg-[#0a0a0a] border border-white/5 cursor-pointer h-full">
+              <div className="absolute inset-0 bg-[#151515] group-hover:bg-[#1a1a1a] transition-colors duration-700" />
+              <img src={work.img} alt={work.client} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/20 to-transparent" />
+              <div className="absolute inset-0 flex items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity duration-500 pointer-events-none">
+                <h3 className="text-2xl lg:text-3xl font-black uppercase tracking-[0.2em] text-white/40 whitespace-nowrap" style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}>{work.client}</h3>
+              </div>
+              <div className="absolute bottom-10 left-10 flex flex-col pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="w-3 h-3 rounded-full shadow-[0_0_10px_currentColor]" style={{ color: work.color, backgroundColor: work.color }} />
+                  <span className="text-white/80 font-bold tracking-widest uppercase text-xs">0{index + 1}</span>
+                </div>
+                <h3 className="text-4xl font-black uppercase tracking-tighter leading-none mb-2">{work.client}</h3>
+                <p className="text-gray-300 font-medium text-sm max-w-xs">{work.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* 📱 MOBILE: Fade/Slide up transition */}
+        <div className="md:hidden w-full flex flex-col gap-6">
+          {photoshootWorks.map((work, index) => (
+            <div key={`mobile-photo-${work.id}`} className="mobile-photoshoot-card relative w-full aspect-[4/5] rounded-[2rem] overflow-hidden bg-[#151515] shadow-2xl">
+              <img src={work.img} alt={work.client} className="absolute inset-0 w-full h-full object-cover opacity-70" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent pointer-events-none" />
+              <div className="absolute bottom-8 left-6 flex flex-col pointer-events-none">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="w-2.5 h-2.5 rounded-full shadow-[0_0_8px_currentColor]" style={{ color: work.color, backgroundColor: work.color }} />
+                  <span className="text-white/80 font-bold tracking-widest uppercase text-xs">0{index + 1}</span>
+                </div>
+                <h3 className="text-3xl font-black uppercase tracking-tighter leading-none mb-2">{work.client}</h3>
+                <p className="text-gray-400 font-medium text-xs max-w-[200px]">{work.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+     {/* ==========================================
+         SECTION 4: WEBSITES
       ========================================== */}
       <section className="relative w-full bg-[#F4F3EE] text-black mt-32 pt-24 pb-[20vh] md:pt-40 md:pb-[40vh] rounded-t-[3rem] md:rounded-t-[5rem] z-20">
         <SectionTitle subtitle="High-Performance E-Commerce & Web" mainTitle="Digital" highlight="Experiences." />
         <div className="relative w-full max-w-[1200px] mx-auto px-4 md:px-12 flex flex-col items-center mt-12 md:mt-24 pb-[10vh]">
           {websiteWorks.map((work) => (
-            <div 
+            <a 
               key={work.id} 
-              className="website-stack-card sticky top-[12vh] md:top-[15vh] w-full aspect-[4/5] md:aspect-video rounded-[2.5rem] md:rounded-[3rem] overflow-hidden bg-gradient-to-br from-white to-gray-200 shadow-[0_30px_60px_rgba(0,0,0,0.15)] border border-black/5 mb-8 md:mb-24 last:mb-0 group cursor-pointer"
+              href={work.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="website-stack-card block sticky top-[12vh] md:top-[15vh] w-full aspect-[4/5] md:aspect-video max-h-[70vh] md:max-h-[75vh] rounded-[2.5rem] md:rounded-[3rem] overflow-hidden bg-gradient-to-br from-white to-gray-200 shadow-[0_30px_60px_rgba(0,0,0,0.15)] border border-black/5 mb-8 md:mb-24 last:mb-0 group cursor-pointer"
             >
               <img src={work.img} alt={work.client} className="absolute inset-0 w-full h-full object-contain p-8 md:p-24 drop-shadow-2xl transition-transform duration-1000 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent pointer-events-none" />
+              
               <div className="absolute bottom-8 left-6 md:bottom-12 md:left-12 text-white pointer-events-none">
                 <span className="inline-block px-3 py-1 bg-primary/20 backdrop-blur-md border border-primary/50 text-primary font-bold uppercase tracking-widest text-[10px] md:text-xs rounded-full mb-3 md:mb-4">{work.type}</span>
                 <h3 className="text-3xl md:text-5xl font-black uppercase tracking-tighter drop-shadow-lg">{work.client}</h3>
               </div>
-              <div className="absolute top-6 right-6 md:top-8 md:right-8 w-12 h-12 md:w-16 md:h-16 bg-black text-white rounded-full flex items-center justify-center opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 shadow-xl">
-                <svg className="w-5 h-5 md:w-6 md:h-6 -rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 12h14M12 5l7 7-7 7"/></svg>
+              
+              {/* 💡 The "Click to Discover" UX Cue: Always visible on mobile, slides in on hover for desktop */}
+              <div className="absolute top-6 right-6 md:top-8 md:right-8 h-10 md:h-14 px-4 md:px-6 bg-black text-white rounded-full flex items-center justify-center opacity-100 md:opacity-0 md:-translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 shadow-xl gap-2">
+                <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest whitespace-nowrap">Visit Live Site</span>
+                <svg className="w-4 h-4 md:w-5 md:h-5 -rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 12h14M12 5l7 7-7 7"/></svg>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </section>

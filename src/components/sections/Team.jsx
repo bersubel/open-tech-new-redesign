@@ -10,11 +10,11 @@ gsap.registerPlugin(ScrollTrigger);
 // 1. BLUEPRINT TEAM DATA (Updated with CEO Titles)
 // ==========================================
 const teamProfiles = {
-  kidus: { img: "/kidus.png", name: "Kidus Yared", role: "CEO / Production Dir & VFX", slug: "/team/kidus-yared" },
-  nahom: { img: "/nahome.png", name: "Nahom Tesfaye", role: "CEO / Marketing Dir & DP", slug: "/team/nahom-tesfaye" },
-  yonas: { img: "/yonas.png", name: "Yonas Kebede", role: "CEO / Creative & AI Dir", slug: "/team/yonas-kebede" },
-  nathenael: { img: "/nathnael.png", name: "Nathenael Nasir", role: "CEO / General Manager", slug: "/team/nathenael-nasir" },
-  nasson: { img: "/nasson.png", name: "Nahom Nasir", role: "Live Stream Expert", slug: "/team/nasson" }, 
+  kidus: { img: "/kidus.png", name: "Kidus Yared", role: "CO Founder  / Production Dir & VFX", slug: "/team/kidus-yared" },
+  nahom: { img: "/nahome.png", name: "Nahom Tesfaye", role: "CO Founder  / Marketing Dir & DP", slug: "/team/nahom-tesfaye" },
+  yonas: { img: "/yonas.png", name: "Yonas Kebede", role: "CO Founder  / Creative & AI Dir", slug: "/team/yonas-kebede" },
+  nathenael: { img: "/nathnael.png", name: "Nathnael N. Al Asser", role: "CO Founder  / General Manager", slug: "/team/nathenael-nasir" },
+  nasson: { img: "/nasson.png", name: "Nahom N. Al Asser", role: "Live Stream Expert", slug: "/team/nasson" }, 
 };
 
 // Disabled the array carousel. Each slot now holds exactly ONE dedicated member.
