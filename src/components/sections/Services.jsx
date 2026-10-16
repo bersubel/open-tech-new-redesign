@@ -160,29 +160,36 @@ export default function Services() {
           pin: true,
           scrub: 1, 
           start: "top top", 
-          end: "+=800%", 
+          end: "+=250%", 
           invalidateOnRefresh: true, 
         }
       });
 
-      tl.to(headerRef.current, { y: "-8vh", opacity: 0.1, duration: 0.5 }, 0);
-      gsap.set(cards, { y: window.innerHeight, rotation: 0 });
+      tl.to(headerRef.current, { y: "-5vh", opacity: 0.1, duration: 1.5 }, 0);
+      
+      // 💡 THE FIX: Dynamic starting position.
+      // Card 0 starts at 25vh (visible with text).
+      // Cards 1-5 start at window.innerHeight (hidden off-screen).
+      gsap.set(cards, { 
+        y: (i) => i === 0 ? "25vh" : window.innerHeight, 
+        rotation: 0 
+      });
 
       cards.forEach((card, i) => {
         tl.to(card, {
           y: 70 + (i * 6), 
           rotation: stackRotations[i], 
           duration: 1,
-          ease: "power2.out"
-        }, "+=1.5"); 
+          ease: "power3.out"
+        }, i * 0.4); 
       });
 
       tl.to(buttonRef.current, {
         y: 0,
         opacity: 1,
-        duration: 1.5,
+        duration: 0.8,
         ease: "power3.out"
-      }, "+=1");
+      }, 0.8);
     });
 
     return () => mm.revert();
@@ -192,7 +199,7 @@ export default function Services() {
     <section 
       id="services" 
       ref={sectionRef} 
-      className="relative w-full h-screen bg-black flex flex-col items-center justify-start md:justify-center overflow-hidden cursor-default pt-24 md:pt-0"
+      className="relative w-full h-screen bg-black flex flex-col items-center justify-start md:justify-center overflow-hidden cursor-default pt-24 md:pt-0 z-30 rounded-t-[2.5rem] md:rounded-none shadow-[0_-30px_50px_rgba(0,0,0,0.8)] md:shadow-none border-t border-white/5 md:border-none -mt-[12vh] md:mt-0"
     >
       <div ref={headerRef} className="relative z-0 max-w-7xl mx-auto w-full text-center px-6">
         <h2 className="text-4xl md:text-[5vw] font-black text-white tracking-tighter leading-none mb-6 md:mb-8">

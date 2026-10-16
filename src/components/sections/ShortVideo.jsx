@@ -83,7 +83,9 @@ export default function ShortVideo() {
         pin: true,
         scrub: 1,
         start: "center center", 
-        end: "+=300%", 
+        // 💡 THE FIX: Drastically reduced the scroll distance. Mobile now only requires 1 screen height of scrolling, Desktop 2.
+        end: () => window.innerWidth < 768 ? "+=100%" : "+=200%",
+        invalidateOnRefresh: true, // Ensures it recalculates if the device is rotated
       }
     });
 
@@ -117,7 +119,8 @@ export default function ShortVideo() {
   return (
     <section 
       ref={sectionRef} 
-      className="relative w-full h-screen bg-black flex flex-col items-center justify-center overflow-hidden"
+      // 💡 THE OVERLAP FIX: Added -mt-[12vh] md:mt-0, z-40, rounded top corners, top border, and heavy drop shadow specifically for mobile
+      className="relative w-full h-screen bg-black flex flex-col items-center justify-center overflow-hidden z-40 rounded-t-[2.5rem] md:rounded-none shadow-[0_-30px_50px_rgba(0,0,0,0.8)] md:shadow-none border-t border-white/5 md:border-none -mt-[12vh] md:mt-0"
     >
       
       {/* EXPANDING BACKGROUND */}
@@ -223,19 +226,17 @@ export default function ShortVideo() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-              // 🔥 UPDATED: Moved higher on mobile (bottom-28) to stay perfectly in sight
               className="absolute bottom-28 md:bottom-10 left-1/2 -translate-x-1/2 z-40 pointer-events-none"
             >
               
               {/* =========================================
-                  MOBILE ONLY: Animated Pointing Hand (Bigger)
+                  MOBILE ONLY: Animated Pointing Hand
               ========================================= */}
               <div className="flex md:hidden flex-col items-center gap-3">
                 <motion.div
                   animate={{ x: [-25, 25, -25] }} 
                   transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
                 >
-                  {/* 🔥 UPDATED: Scaled up to w-14 h-14 */}
                   <svg 
                     className="w-14 h-14 text-primary drop-shadow-[0_0_15px_rgba(245,178,26,0.7)]" 
                     viewBox="0 0 24 24" 
@@ -249,7 +250,6 @@ export default function ShortVideo() {
                     <path d="M14 12h2a2 2 0 0 1 2 2v3a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5v-4a2 2 0 0 1 2-2h3" />
                   </svg>
                 </motion.div>
-                {/* 🔥 UPDATED: Scaled text to text-xs and added more padding */}
                 <span className="font-black uppercase tracking-[0.3em] text-xs text-white/90 bg-black/50 px-5 py-2 rounded-full backdrop-blur-md border border-white/10 shadow-lg">
                   Swipe
                 </span>

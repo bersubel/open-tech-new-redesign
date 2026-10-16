@@ -29,7 +29,7 @@ export default function HorizontalSlogan() {
     // 2. Hide ALL stickers initially
     gsap.set([sticker1.current, sticker2.current, sticker3.current, sticker4.current], { scale: 0, opacity: 0 });
 
-    // 3. MASTER TIMELINE
+    // 3. MASTER TIMELINE (Left exactly at +=250% so your entry timing is PERFECT)
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: sectionRef.current,
@@ -43,7 +43,8 @@ export default function HorizontalSlogan() {
     ScrollTrigger.create({
       trigger: sectionRef.current,
       start: "top top",
-      end: "+=250%",
+      // 💡 THE FIX: Pin ends at +=150% so it releases the EXACT millisecond the timeline above finishes. Zero dead scrolling!
+      end: "+=150%", 
       pin: true,
     });
 
@@ -55,7 +56,8 @@ export default function HorizontalSlogan() {
     tl.fromTo(wrapperRef.current, {
       x: () => window.innerWidth + 50 
     }, {
-      x: () => -(wrapperRef.current.scrollWidth + 100),
+      // 💡 THE FIX: Stops the slide exactly when the last letter enters the edge, leaving a piece of it visible.
+      x: () => -(wrapperRef.current.scrollWidth) + (window.innerWidth < 768 ? 150 : 300),
       ease: "none",
       duration: 12 
     }, 0);
@@ -124,7 +126,8 @@ export default function HorizontalSlogan() {
   return (
     <section 
       ref={sectionRef} 
-      className="relative w-full h-screen bg-black flex flex-col items-center justify-center overflow-hidden cursor-default"
+      // 💡 ADDED: -mt-[12vh] md:mt-0 to aggressively pull the page up over the Hero section only on mobile
+      className="relative w-full h-screen bg-black flex flex-col items-center justify-center overflow-hidden cursor-default z-30 rounded-t-[2.5rem] md:rounded-none shadow-[0_-30px_50px_rgba(0,0,0,0.8)] md:shadow-none border-t border-white/5 md:border-none -mt-[12vh] md:mt-0"
     >
       
       {/* 🌟 POP-UP PNG STICKERS */}
